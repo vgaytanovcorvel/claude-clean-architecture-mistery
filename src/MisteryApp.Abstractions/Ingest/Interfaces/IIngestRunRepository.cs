@@ -11,4 +11,5 @@ public interface IIngestRunRepository
     Task<IReadOnlyList<IngestRun>> IngestRunGetSummariesAsync(int limit, CancellationToken cancellationToken);
     Task<IngestRejectedFile> IngestRejectedFileAddAsync(IngestRejectedFile rejectedFile, CancellationToken cancellationToken);
     Task<IReadOnlyList<IngestRejectedFile>> IngestRejectedFileGetByRunIdAsync(Guid runId, CancellationToken cancellationToken);
+    Task<MappedRecord> MappedRecordAddAsync(Guid runId, string filePath, MappedRecord record, CancellationToken cancellationToken);
 }

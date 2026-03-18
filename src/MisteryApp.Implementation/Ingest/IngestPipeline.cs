@@ -106,7 +106,12 @@ public class IngestPipeline(
             var result = await fileProcessor.ProcessFileAsync(filePath, hintFormat, cancellationToken);
             state.IncrementProcessed();
 
-            if (!result.Succeeded)
+            if (result.Succeeded)
+            {
+                if (!dryRun && result.Record is not null)
+                    await runRepository.MappedRecordAddAsync(runId, filePath, result.Record, cancellationToken);
+            }
+            else
             {
                 state.IncrementRejected();
                 if (!dryRun)

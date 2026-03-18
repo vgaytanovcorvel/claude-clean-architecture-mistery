@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp:*)",
+      "Bash(mkdir -p src/MisteryApp.Common src/MisteryApp.Abstractions/Exceptions src/MisteryApp.Abstractions/Models src/MisteryApp.Implementation/Extensions src/MisteryApp.Repository/Contexts src/MisteryApp.Repository/Extensions src/MisteryApp.Web.Core/Extensions src/MisteryApp.Web.Api src/MisteryApp.Web.Server src/MisteryApp.Cli tests/MisteryApp.Common.Tests tests/MisteryApp.Abstractions.Tests tests/MisteryApp.Implementation.Tests tests/MisteryApp.Repository.Tests tests/MisteryApp.Web.Core.Tests tests/MisteryApp.Web.Api.Tests tests/MisteryApp.Web.Server.Tests tests/MisteryApp.Cli.Tests)",
+      "Bash(dotnet new:*)",
+      "Bash(dotnet sln:*)",
+      "Bash(ls:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet package:*)",
+      "Bash(dotnet add:*)",
+      "Read(//c/Users/a03.Vladimir_Gaytano/.nuget/packages/system.commandline.hosting/0.4.0-alpha.25306.1/lib/**)",
+      "Read(//c/Users/a03.Vladimir_Gaytano/.nuget/packages/system.commandline/2.0.5/lib/**)",
+      "Bash(gh repo:*)",
+      "Bash(dotnet test:*)",
+      "Bash(dotnet ef:*)",
+      "Bash(dotnet list:*)",
+      "Bash(dotnet user-secrets:*)",
+      "Bash(\"C:\\\\Users\\\\a03.Vladimir_Gaytano\\\\source\\\\repos\\\\claude-clean-architecture-mistery\\\\testdata\\\\sample.csv\":*)",
+      "Bash(dotnet run:*)",
+      "Read(//c/Users/a03.Vladimir_Gaytano/source/repos/claude-clean-architecture-mistery/%APPDATA%/NuGet/**)",
+      "Read(//c/Users/a03.Vladimir_Gaytano/source/repos/claude-clean-architecture-mistery/$APPDATA/NuGet/**)"
+    ]
+  }
+}

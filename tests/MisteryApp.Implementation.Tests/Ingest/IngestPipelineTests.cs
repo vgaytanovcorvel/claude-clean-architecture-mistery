@@ -55,6 +55,11 @@ public class IngestPipelineTests
             .Verifiable(Times.Once());
 
         runRepositoryMock
+            .Setup(r => r.MappedRecordAddAsync(savedRun.RunId, tmpFile, It.IsAny<MappedRecord>(), cancellationToken))
+            .Returns((Guid _, string _, MappedRecord rec, CancellationToken _) => Task.FromResult(rec))
+            .Verifiable(Times.Once());
+
+        runRepositoryMock
             .Setup(r => r.IngestRunUpdateAsync(It.Is<IngestRun>(run => run.Status == IngestRunStatus.Completed), cancellationToken))
             .ReturnsAsync(updatedRun)
             .Verifiable(Times.Once());
@@ -111,6 +116,11 @@ public class IngestPipelineTests
         fileProcessorMock
             .Setup(p => p.ProcessFileAsync(It.Is<string>(f => f == file2), FileFormat.Auto, cancellationToken))
             .ReturnsAsync(failResult)
+            .Verifiable(Times.Once());
+
+        runRepositoryMock
+            .Setup(r => r.MappedRecordAddAsync(savedRun.RunId, file1, It.IsAny<MappedRecord>(), cancellationToken))
+            .Returns((Guid _, string _, MappedRecord rec, CancellationToken _) => Task.FromResult(rec))
             .Verifiable(Times.Once());
 
         runRepositoryMock
@@ -215,6 +225,11 @@ public class IngestPipelineTests
         fileProcessorMock
             .Setup(p => p.ProcessFileAsync(tmpFile, FileFormat.Auto, cancellationToken))
             .ReturnsAsync(successResult)
+            .Verifiable(Times.Once());
+
+        runRepositoryMock
+            .Setup(r => r.MappedRecordAddAsync(savedRetryRun.RunId, tmpFile, It.IsAny<MappedRecord>(), cancellationToken))
+            .Returns((Guid _, string _, MappedRecord rec, CancellationToken _) => Task.FromResult(rec))
             .Verifiable(Times.Once());
 
         runRepositoryMock

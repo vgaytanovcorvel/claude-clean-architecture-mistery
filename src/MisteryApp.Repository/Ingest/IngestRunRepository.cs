@@ -99,6 +99,27 @@ public class IngestRunRepository(
             .ToListAsync(cancellationToken);
     }
 
+    public virtual async Task<MappedRecord> MappedRecordAddAsync(Guid runId, string filePath, MappedRecord record, CancellationToken cancellationToken)
+    {
+        await using var dbContext = await CreateContextAsync(cancellationToken);
+        var entity = new MappedRecordEntity
+        {
+            Id = Guid.NewGuid(),
+            RunId = runId,
+            FilePath = filePath,
+            ExternalId = record.Id,
+            Timestamp = record.Timestamp,
+            Value = record.Value,
+            Description = record.Description,
+            Source = record.Source,
+            Category = record.Category,
+            IngestedAt = DateTimeOffset.UtcNow
+        };
+        await dbContext.MappedRecords.AddAsync(entity, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return MapMappedRecordToDomain(entity);
+    }
+
     private IngestRun MapToDomain(IngestRunEntity entity) =>
         new(entity.RunId, entity.Status, entity.InputPath, entity.StartedAt,
             entity.CompletedAt, entity.TotalFiles, entity.ProcessedFiles, entity.RejectedFiles);
@@ -118,4 +139,7 @@ public class IngestRunRepository(
             ProcessedFiles = run.ProcessedFiles,
             RejectedFiles = run.RejectedFiles
         };
+
+    private static MappedRecord MapMappedRecordToDomain(MappedRecordEntity entity) =>
+        new(entity.ExternalId, entity.Timestamp, entity.Value, entity.Description, entity.Source, entity.Category);
 }

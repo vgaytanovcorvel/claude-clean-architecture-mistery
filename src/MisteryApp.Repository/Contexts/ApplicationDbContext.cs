@@ -8,6 +8,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<IngestRunEntity> IngestRuns => Set<IngestRunEntity>();
     public DbSet<IngestRejectedFileEntity> IngestRejectedFiles => Set<IngestRejectedFileEntity>();
+    public DbSet<MappedRecordEntity> MappedRecords => Set<MappedRecordEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
