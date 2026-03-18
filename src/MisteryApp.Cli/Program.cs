@@ -3,7 +3,9 @@ using MisteryApp.Cli.Commands;
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration((ctx, config) =>
     {
-        config.AddJsonFile("appsettings.json", optional: true);
+        config.SetBasePath(AppContext.BaseDirectory)
+              .AddJsonFile("appsettings.json", optional: true);
+        config.AddUserSecrets(System.Reflection.Assembly.GetExecutingAssembly(), optional: true);
         config.AddEnvironmentVariables(prefix: "MISTERYAPP_");
     })
     .ConfigureServices((ctx, services) =>
