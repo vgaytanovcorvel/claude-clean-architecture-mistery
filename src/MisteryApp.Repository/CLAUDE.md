@@ -6,6 +6,7 @@ Data access layer — EF Core DbContext, entity classes, repository implementati
 
 @../../rules/common/coding-style.md
 @../../rules/common/patterns.md
+@../../rules/common/security.md
 @../../rules/csharp/coding-style.md
 @../../rules/csharp/persistence.md
 @../../rules/csharp/security.md
