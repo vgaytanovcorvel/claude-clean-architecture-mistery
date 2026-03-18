@@ -11,8 +11,9 @@ namespace MisteryApp.Implementation.Ingest.Agents;
 public class SchemaMapper(IChatAgentInvoker chatAgentInvoker) : ISchemaMapper
 {
     private const string MapSystemPrompt = """
-        You are a data schema mapper. Extract a structured record from file content.
-        Respond with JSON only using these optional fields:
+        You are a data schema mapper. Extract a single representative structured record from file content.
+        If the file contains multiple rows or entries, summarise or pick the most representative one.
+        Respond with a single JSON object only — never an array — using these optional fields:
         id (string), timestamp (ISO 8601 string), value (number), description (string), source (string), category (string).
         Example: {"id":"rec-1","timestamp":"2024-01-15T10:00:00Z","value":42.5,"description":"sample","source":"file.csv","category":"A"}
         """;
@@ -49,15 +50,20 @@ public class SchemaMapper(IChatAgentInvoker chatAgentInvoker) : ISchemaMapper
         {
             using var doc = JsonDocument.Parse(json);
             var root = doc.RootElement;
+            var element = root.ValueKind == JsonValueKind.Array
+                ? root.EnumerateArray().FirstOrDefault()
+                : root;
+            if (element.ValueKind != JsonValueKind.Object)
+                return new MappedRecord(null, null, null, null, null, null);
             return new MappedRecord(
-                GetStringProperty(root, "id"),
-                GetDateTimeProperty(root, "timestamp"),
-                GetDecimalProperty(root, "value"),
-                GetStringProperty(root, "description"),
-                GetStringProperty(root, "source"),
-                GetStringProperty(root, "category"));
+                GetStringProperty(element, "id"),
+                GetDateTimeProperty(element, "timestamp"),
+                GetDecimalProperty(element, "value"),
+                GetStringProperty(element, "description"),
+                GetStringProperty(element, "source"),
+                GetStringProperty(element, "category"));
         }
-        catch (JsonException)
+        catch (Exception) when (true)
         {
             return new MappedRecord(null, null, null, null, null, null);
         }
