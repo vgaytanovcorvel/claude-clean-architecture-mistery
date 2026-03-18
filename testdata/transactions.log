@@ -1,0 +1,4 @@
+[2024-02-01 08:12:33] INFO  TXN-4901  DEBIT   $320.00   vendor=AmazonWebServices   dept=engineering   note=Cloud infrastructure monthly charge
+[2024-02-03 11:45:00] INFO  TXN-4902  CREDIT  $1200.00  vendor=ClientAlpha         dept=sales         note=Invoice INV-2024-0203 payment received
+[2024-02-05 14:22:10] WARN  TXN-4903  DEBIT   $-50.00   vendor=OfficeDepot         dept=admin         note=Returned stapler — negative charge
+[2024-02-07 09:00:00] INFO  TXN-4904  DEBIT   $89.99    vendor=GitHub              dept=engineering   note=Copilot seats renewal

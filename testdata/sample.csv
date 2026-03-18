@@ -1,0 +1,4 @@
+id,timestamp,value,description,source,category
+1,2024-01-15 10:00:00,150.00,Office supplies purchase,accounts_payable,expenses
+2,2024-01-16 14:30:00,2500.00,Monthly server costs,it_department,infrastructure
+3,2024-01-17 09:15:00,-75.00,Credit adjustment,accounts_receivable,refunds
