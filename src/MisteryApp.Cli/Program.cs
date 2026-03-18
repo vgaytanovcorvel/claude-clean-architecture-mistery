@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using MisteryApp.Cli.Commands;
+using MisteryApp.Repository.Contexts;
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration((ctx, config) =>
@@ -14,6 +16,10 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddPersistence(ctx.Configuration);
     })
     .Build();
+
+var dbFactory = host.Services.GetRequiredService<IDbContextFactory<ApplicationDbContext>>();
+await using (var db = await dbFactory.CreateDbContextAsync())
+    await db.Database.MigrateAsync();
 
 var rootCommand = new RootCommand("MisteryApp CLI");
 
