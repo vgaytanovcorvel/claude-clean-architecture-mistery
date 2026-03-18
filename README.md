@@ -44,6 +44,30 @@ code .
 
 Then describe what you want to build and Claude Code will follow the clean architecture rules automatically.
 
+## Example feature: Unstructured Ingestor
+
+The `feature/unstructured-ingestor` branch adds an `ingest` CLI command that processes a folder of mixed-format files (raw logs, CSVs, OCR text) through a 4-agent AI pipeline into a unified SQL Server schema.
+
+```bash
+# Dry-run (no DB write)
+dotnet run --project src/MisteryApp.Cli -- ingest ./samples --dry-run
+
+# Full run with format override
+export MISTERYAPP_OPENAI__APIKEY=sk-...
+dotnet run --project src/MisteryApp.Cli -- ingest ./samples --format csv
+```
+
+**Pipeline:** `IngestDispatcher` → `SchemaMapper` → `QualityCritic` → `HealerAgent`
+
+Each agent is backed by Semantic Kernel (`Microsoft.SemanticKernel`) prompt invocation via a thin `IKernelInvoker` shim (makes agents Moq-testable without touching the real `Kernel`). `CsvHelper` is used for structured CSV parsing before the mapping prompt.
+
+After a successful run, records are batch-inserted into `IngestedRecords` via `IIngestedRecordRepository`. Apply the EF migration to create the table:
+
+```bash
+dotnet ef migrations add AddIngestedRecords --project src/MisteryApp.Repository
+dotnet ef database update --project src/MisteryApp.Repository
+```
+
 ## Key conventions
 
 | Concern | Convention |
@@ -59,4 +83,5 @@ Then describe what you want to build and Claude Code will follow the clean archi
 
 - .NET 9 SDK
 - SQL Server / LocalDB (for EF Core migrations)
+- OpenAI API key (`MISTERYAPP_OPENAI__APIKEY`) — required for the ingest pipeline
 - [GitHub CLI](https://cli.github.com) + [Claude Code](https://claude.ai/code) (optional but recommended)

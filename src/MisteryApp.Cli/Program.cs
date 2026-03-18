@@ -27,6 +27,8 @@ rootCommand.Options.Add(verboseOption);
 rootCommand.Options.Add(quietOption);
 rootCommand.Options.Add(jsonOption);
 
+rootCommand.Subcommands.Add(MisteryApp.Cli.Commands.IngestCommand.Build(host));
+
 var exitCode = await rootCommand.Parse(args).InvokeAsync();
 
 await host.StopAsync();
