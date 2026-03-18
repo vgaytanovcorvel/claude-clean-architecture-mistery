@@ -18,12 +18,14 @@ public static class ImplementationServiceCollectionExtensions
         services.AddSingleton<Kernel>(sp =>
         {
             var config = sp.GetRequiredService<IConfiguration>();
-            var apiKey = config["OpenAI:ApiKey"]
-                ?? throw new InvalidOperationException("OpenAI:ApiKey not configured. Set MISTERYAPP_OPENAI__APIKEY environment variable.");
-            var model = config["OpenAI:Model"] ?? "gpt-4o-mini";
+            var endpoint = config["AzureOpenAI:Endpoint"]
+                ?? throw new InvalidOperationException("AzureOpenAI:Endpoint not configured. Set MISTERYAPP_AZUREOPENAI__ENDPOINT environment variable.");
+            var apiKey = config["AzureOpenAI:ApiKey"]
+                ?? throw new InvalidOperationException("AzureOpenAI:ApiKey not configured. Set MISTERYAPP_AZUREOPENAI__APIKEY environment variable.");
+            var deploymentName = config["AzureOpenAI:DeploymentName"] ?? "gpt-4o-mini";
 
             var kernel = Kernel.CreateBuilder()
-                .AddOpenAIChatCompletion(model, apiKey)
+                .AddAzureOpenAIChatCompletion(deploymentName, endpoint, apiKey)
                 .Build();
             kernel.Plugins.AddFromType<FileIoPlugin>();
             return kernel;
