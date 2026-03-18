@@ -108,8 +108,8 @@ public class IngestPipeline(
 
             if (result.Succeeded)
             {
-                if (!dryRun && result.Record is not null)
-                    await runRepository.MappedRecordAddAsync(runId, filePath, result.Record, cancellationToken);
+                if (!dryRun && result.Records is { Count: > 0 })
+                    await runRepository.MappedRecordAddRangeAsync(runId, filePath, result.Records, cancellationToken);
             }
             else
             {

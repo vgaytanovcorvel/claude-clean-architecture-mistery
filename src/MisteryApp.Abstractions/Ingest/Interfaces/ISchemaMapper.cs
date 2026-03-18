@@ -4,5 +4,5 @@ namespace MisteryApp.Abstractions.Ingest.Interfaces;
 
 public interface ISchemaMapper
 {
-    Task<MappedRecord> MapAsync(FileClassification classification, CancellationToken cancellationToken);
+    Task<IReadOnlyList<MappedRecord>> MapAsync(FileClassification classification, CancellationToken cancellationToken);
 }

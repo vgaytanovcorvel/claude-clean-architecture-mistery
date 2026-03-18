@@ -19,15 +19,41 @@ public class IngestFileProcessor(
             ? await dispatcher.ClassifyAsync(filePath, cancellationToken)
             : new FileClassification(filePath, hintFormat);
 
-        var record = await schemaMapper.MapAsync(classification, cancellationToken);
-        var qualityReport = await qualityCritic.ReviewAsync(record, filePath, cancellationToken);
+        var records = await schemaMapper.MapAsync(classification, cancellationToken);
+        if (records.Count == 0)
+            return new FileProcessResult(filePath, false, null, "No records extracted from file.");
 
+        var accepted = await ReviewAndHealRecordsAsync(records, filePath, cancellationToken);
+        return accepted.Count > 0
+            ? new FileProcessResult(filePath, true, accepted, null)
+            : new FileProcessResult(filePath, false, null, "All extracted records were rejected.");
+    }
+
+    private async Task<IReadOnlyList<MappedRecord>> ReviewAndHealRecordsAsync(
+        IReadOnlyList<MappedRecord> records,
+        string filePath,
+        CancellationToken cancellationToken)
+    {
+        var accepted = new List<MappedRecord>();
+        foreach (var record in records)
+        {
+            var acceptedRecord = await ReviewAndHealSingleAsync(record, filePath, cancellationToken);
+            if (acceptedRecord is not null)
+                accepted.Add(acceptedRecord);
+        }
+        return accepted;
+    }
+
+    private async Task<MappedRecord?> ReviewAndHealSingleAsync(
+        MappedRecord record,
+        string filePath,
+        CancellationToken cancellationToken)
+    {
+        var qualityReport = await qualityCritic.ReviewAsync(record, filePath, cancellationToken);
         if (qualityReport.IsAcceptable)
-            return new FileProcessResult(filePath, true, qualityReport.Record, null);
+            return qualityReport.Record;
 
         var healResult = await healerAgent.HealAsync(qualityReport, cancellationToken);
-        return healResult.IsSuccess
-            ? new FileProcessResult(filePath, true, healResult.Value, null)
-            : new FileProcessResult(filePath, false, null, healResult.Error);
+        return healResult.IsSuccess ? healResult.Value : null;
     }
 }

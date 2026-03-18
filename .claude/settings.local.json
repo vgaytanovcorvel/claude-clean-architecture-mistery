@@ -19,7 +19,11 @@
       "Bash(\"C:\\\\Users\\\\a03.Vladimir_Gaytano\\\\source\\\\repos\\\\claude-clean-architecture-mistery\\\\testdata\\\\sample.csv\":*)",
       "Bash(dotnet run:*)",
       "Read(//c/Users/a03.Vladimir_Gaytano/source/repos/claude-clean-architecture-mistery/%APPDATA%/NuGet/**)",
-      "Read(//c/Users/a03.Vladimir_Gaytano/source/repos/claude-clean-architecture-mistery/$APPDATA/NuGet/**)"
+      "Read(//c/Users/a03.Vladimir_Gaytano/source/repos/claude-clean-architecture-mistery/$APPDATA/NuGet/**)",
+      "Bash(echo \"MISTERYAPP_OPENAI__APIKEY=$MISTERYAPP_OPENAI__APIKEY\")",
+      "Bash(echo \"MISTERYAPP_OPENAI__MODEL=$MISTERYAPP_OPENAI__MODEL\")",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(MISTERYAPP_AZUREOPENAI__APIKEY=\"\" dotnet run --project src/MisteryApp.Cli -- ingest run ./testdata)"
     ]
   }
 }

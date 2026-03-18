@@ -35,7 +35,7 @@ public class IngestPipelineTests
     {
         // Arrange
         var tmpFile = CreateTempFile();
-        var successResult = new FileProcessResult(tmpFile, true, new MappedRecord("1", null, 1m, null, null, null), null);
+        var successResult = new FileProcessResult(tmpFile, true, [new MappedRecord("1", null, 1m, null, null, null)], null);
         var savedRun = BuildRun(tmpFile, IngestRunStatus.Running, 1, 0, 0);
         var updatedRun = savedRun with { Status = IngestRunStatus.Completed, ProcessedFiles = 1, CompletedAt = FixedTime };
 
@@ -55,8 +55,8 @@ public class IngestPipelineTests
             .Verifiable(Times.Once());
 
         runRepositoryMock
-            .Setup(r => r.MappedRecordAddAsync(savedRun.RunId, tmpFile, It.IsAny<MappedRecord>(), cancellationToken))
-            .Returns((Guid _, string _, MappedRecord rec, CancellationToken _) => Task.FromResult(rec))
+            .Setup(r => r.MappedRecordAddRangeAsync(savedRun.RunId, tmpFile, It.IsAny<IReadOnlyList<MappedRecord>>(), cancellationToken))
+            .Returns((Guid _, string _, IReadOnlyList<MappedRecord> recs, CancellationToken _) => Task.FromResult(recs))
             .Verifiable(Times.Once());
 
         runRepositoryMock
@@ -93,7 +93,7 @@ public class IngestPipelineTests
         File.WriteAllText(file1, "ok");
         File.WriteAllText(file2, "bad");
 
-        var successResult = new FileProcessResult(file1, true, new MappedRecord("1", null, 1m, null, null, null), null);
+        var successResult = new FileProcessResult(file1, true, [new MappedRecord("1", null, 1m, null, null, null)], null);
         var failResult = new FileProcessResult(file2, false, null, "Hallucination detected");
         var savedRun = BuildRun(tmpDir, IngestRunStatus.Running, 2, 0, 0);
         var updatedRun = savedRun with { Status = IngestRunStatus.PartialSuccess, ProcessedFiles = 2, RejectedFiles = 1, CompletedAt = FixedTime };
@@ -119,8 +119,8 @@ public class IngestPipelineTests
             .Verifiable(Times.Once());
 
         runRepositoryMock
-            .Setup(r => r.MappedRecordAddAsync(savedRun.RunId, file1, It.IsAny<MappedRecord>(), cancellationToken))
-            .Returns((Guid _, string _, MappedRecord rec, CancellationToken _) => Task.FromResult(rec))
+            .Setup(r => r.MappedRecordAddRangeAsync(savedRun.RunId, file1, It.IsAny<IReadOnlyList<MappedRecord>>(), cancellationToken))
+            .Returns((Guid _, string _, IReadOnlyList<MappedRecord> recs, CancellationToken _) => Task.FromResult(recs))
             .Verifiable(Times.Once());
 
         runRepositoryMock
@@ -156,7 +156,7 @@ public class IngestPipelineTests
     {
         // Arrange
         var tmpFile = CreateTempFile();
-        var successResult = new FileProcessResult(tmpFile, true, new MappedRecord("1", null, 1m, null, null, null), null);
+        var successResult = new FileProcessResult(tmpFile, true, [new MappedRecord("1", null, 1m, null, null, null)], null);
 
         pipelineMock
             .Setup(p => p.RunAsync(tmpFile, true, FileFormat.Auto, 4, cancellationToken))
@@ -198,7 +198,7 @@ public class IngestPipelineTests
         {
             new(Guid.NewGuid(), runId, tmpFile, "Some issue", FixedTime)
         };
-        var successResult = new FileProcessResult(tmpFile, true, new MappedRecord("1", null, 1m, null, null, null), null);
+        var successResult = new FileProcessResult(tmpFile, true, [new MappedRecord("1", null, 1m, null, null, null)], null);
         var savedRetryRun = BuildRun(tmpFile, IngestRunStatus.Running, 1, 0, 0);
         var updatedRetryRun = savedRetryRun with { Status = IngestRunStatus.Completed, ProcessedFiles = 1, CompletedAt = FixedTime };
 
@@ -228,8 +228,8 @@ public class IngestPipelineTests
             .Verifiable(Times.Once());
 
         runRepositoryMock
-            .Setup(r => r.MappedRecordAddAsync(savedRetryRun.RunId, tmpFile, It.IsAny<MappedRecord>(), cancellationToken))
-            .Returns((Guid _, string _, MappedRecord rec, CancellationToken _) => Task.FromResult(rec))
+            .Setup(r => r.MappedRecordAddRangeAsync(savedRetryRun.RunId, tmpFile, It.IsAny<IReadOnlyList<MappedRecord>>(), cancellationToken))
+            .Returns((Guid _, string _, IReadOnlyList<MappedRecord> recs, CancellationToken _) => Task.FromResult(recs))
             .Verifiable(Times.Once());
 
         runRepositoryMock

@@ -53,7 +53,7 @@ public class IngestFileProcessorTests
 
         schemaMapperMock
             .Setup(m => m.MapAsync(SampleClassification, cancellationToken))
-            .ReturnsAsync(SampleRecord)
+            .ReturnsAsync((IReadOnlyList<MappedRecord>)[SampleRecord])
             .Verifiable(Times.Once());
 
         qualityCriticMock
@@ -66,7 +66,7 @@ public class IngestFileProcessorTests
 
         // Assert
         result.Succeeded.Should().BeTrue();
-        result.Record.Should().Be(SampleRecord);
+        result.Records.Should().ContainSingle().Which.Should().Be(SampleRecord);
         result.RejectionReason.Should().BeNull();
         processorMock.VerifyAll();
         dispatcherMock.VerifyAll();
@@ -95,7 +95,7 @@ public class IngestFileProcessorTests
 
         schemaMapperMock
             .Setup(m => m.MapAsync(classification, cancellationToken))
-            .ReturnsAsync(SampleRecord)
+            .ReturnsAsync((IReadOnlyList<MappedRecord>)[SampleRecord])
             .Verifiable(Times.Once());
 
         qualityCriticMock
@@ -113,8 +113,8 @@ public class IngestFileProcessorTests
 
         // Assert
         result.Succeeded.Should().BeFalse();
-        result.Record.Should().BeNull();
-        result.RejectionReason.Should().Contain("fabricated");
+        result.Records.Should().BeNullOrEmpty();
+        result.RejectionReason.Should().Contain("rejected");
         processorMock.VerifyAll();
         dispatcherMock.VerifyAll();
         schemaMapperMock.VerifyAll();
@@ -143,7 +143,7 @@ public class IngestFileProcessorTests
 
         schemaMapperMock
             .Setup(m => m.MapAsync(classification, cancellationToken))
-            .ReturnsAsync(SampleRecord)
+            .ReturnsAsync((IReadOnlyList<MappedRecord>)[SampleRecord])
             .Verifiable(Times.Once());
 
         qualityCriticMock
@@ -161,7 +161,7 @@ public class IngestFileProcessorTests
 
         // Assert
         result.Succeeded.Should().BeTrue();
-        result.Record.Should().Be(healedRecord);
+        result.Records.Should().ContainSingle().Which.Should().Be(healedRecord);
         processorMock.VerifyAll();
         dispatcherMock.VerifyAll();
         schemaMapperMock.VerifyAll();
@@ -183,7 +183,7 @@ public class IngestFileProcessorTests
 
         schemaMapperMock
             .Setup(m => m.MapAsync(SampleClassification, cancellationToken))
-            .ReturnsAsync(SampleRecord)
+            .ReturnsAsync((IReadOnlyList<MappedRecord>)[SampleRecord])
             .Verifiable(Times.Once());
 
         qualityCriticMock
@@ -220,7 +220,7 @@ public class IngestFileProcessorTests
             .Setup(m => m.MapAsync(
                 It.Is<FileClassification>(c => c.Format == FileFormat.Log && c.FilePath == filePath),
                 cancellationToken))
-            .ReturnsAsync(SampleRecord)
+            .ReturnsAsync((IReadOnlyList<MappedRecord>)[SampleRecord])
             .Verifiable(Times.Once());
 
         qualityCriticMock

@@ -99,10 +99,14 @@ public class IngestRunRepository(
             .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<MappedRecord> MappedRecordAddAsync(Guid runId, string filePath, MappedRecord record, CancellationToken cancellationToken)
+    public virtual async Task<IReadOnlyList<MappedRecord>> MappedRecordAddRangeAsync(
+        Guid runId,
+        string filePath,
+        IReadOnlyList<MappedRecord> records,
+        CancellationToken cancellationToken)
     {
         await using var dbContext = await CreateContextAsync(cancellationToken);
-        var entity = new MappedRecordEntity
+        var entities = records.Select(record => new MappedRecordEntity
         {
             Id = Guid.NewGuid(),
             RunId = runId,
@@ -114,10 +118,10 @@ public class IngestRunRepository(
             Source = record.Source,
             Category = record.Category,
             IngestedAt = DateTimeOffset.UtcNow
-        };
-        await dbContext.MappedRecords.AddAsync(entity, cancellationToken);
+        }).ToList();
+        dbContext.MappedRecords.AddRange(entities);
         await dbContext.SaveChangesAsync(cancellationToken);
-        return MapMappedRecordToDomain(entity);
+        return entities.Select(MapMappedRecordToDomain).ToList();
     }
 
     private IngestRun MapToDomain(IngestRunEntity entity) =>

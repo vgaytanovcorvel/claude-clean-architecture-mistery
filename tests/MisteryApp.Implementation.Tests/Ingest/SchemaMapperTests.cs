@@ -24,14 +24,14 @@ public class SchemaMapperTests
     }
 
     [TestMethod]
-    public async Task MapAsync_ShouldReturnMappedRecord_WhenLogFileProvided()
+    public async Task MapAsync_ShouldReturnMappedRecords_WhenLogFileProvided()
     {
         // Arrange
         var tmpFile = Path.GetTempFileName() + ".log";
         File.WriteAllText(tmpFile, "2024-01-15T10:00:00Z ERROR value=-5.5 source=sensor-1");
 
         var classification = new FileClassification(tmpFile, FileFormat.Log);
-        const string llmResponse = """{"id":"rec-1","timestamp":"2024-01-15T10:00:00Z","value":-5.5,"description":"ERROR","source":"sensor-1","category":"error"}""";
+        const string llmResponse = """[{"id":"rec-1","timestamp":"2024-01-15T10:00:00Z","value":-5.5,"description":"ERROR","source":"sensor-1","category":"error"}]""";
 
         schemaMapperMock
             .Setup(m => m.MapAsync(classification, cancellationToken))
@@ -53,9 +53,10 @@ public class SchemaMapperTests
             var result = await schemaMapperMock.Object.MapAsync(classification, cancellationToken);
 
             // Assert
-            result.Id.Should().Be("rec-1");
-            result.Value.Should().Be(-5.5m);
-            result.Source.Should().Be("sensor-1");
+            result.Should().HaveCount(1);
+            result[0].Id.Should().Be("rec-1");
+            result[0].Value.Should().Be(-5.5m);
+            result[0].Source.Should().Be("sensor-1");
 
             schemaMapperMock.VerifyAll();
             chatAgentInvokerMock.VerifyAll();
@@ -67,7 +68,7 @@ public class SchemaMapperTests
     }
 
     [TestMethod]
-    public async Task MapAsync_ShouldReturnNullFields_WhenLlmReturnsInvalidJson()
+    public async Task MapAsync_ShouldReturnEmptyList_WhenLlmReturnsInvalidJson()
     {
         // Arrange
         var tmpFile = Path.GetTempFileName() + ".log";
@@ -95,9 +96,7 @@ public class SchemaMapperTests
             var result = await schemaMapperMock.Object.MapAsync(classification, cancellationToken);
 
             // Assert
-            result.Id.Should().BeNull();
-            result.Value.Should().BeNull();
-            result.Description.Should().BeNull();
+            result.Should().BeEmpty();
 
             schemaMapperMock.VerifyAll();
             chatAgentInvokerMock.VerifyAll();
@@ -172,8 +171,9 @@ public class SchemaMapperTests
             var result = await schemaMapperMock.Object.MapAsync(classification, cancellationToken);
 
             // Assert
-            result.Value.Should().Be(123.45m);
-            result.Description.Should().Be("test");
+            result.Should().HaveCount(1);
+            result[0].Value.Should().Be(123.45m);
+            result[0].Description.Should().Be("test");
 
             schemaMapperMock.VerifyAll();
             chatAgentInvokerMock.VerifyAll();
