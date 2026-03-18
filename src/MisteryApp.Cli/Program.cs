@@ -1,4 +1,6 @@
-using var host = Host.CreateDefaultBuilder(args)
+using MisteryApp.Cli.Commands;
+
+var host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration((ctx, config) =>
     {
         config.AddJsonFile("appsettings.json", optional: true);
@@ -11,23 +13,12 @@ using var host = Host.CreateDefaultBuilder(args)
     })
     .Build();
 
-await host.StartAsync();
-
-var verboseOption = new Option<bool>("--verbose", "-v");
-verboseOption.Description = "Enable verbose output";
-
-var quietOption = new Option<bool>("--quiet", "-q");
-quietOption.Description = "Suppress non-error output";
-
-var jsonOption = new Option<bool>("--json");
-jsonOption.Description = "Output results as JSON";
-
 var rootCommand = new RootCommand("MisteryApp CLI");
-rootCommand.Options.Add(verboseOption);
-rootCommand.Options.Add(quietOption);
-rootCommand.Options.Add(jsonOption);
 
-var exitCode = await rootCommand.Parse(args).InvokeAsync();
+var ingestCommand = new Command("ingest", "Ingest unstructured files into structured records");
+ingestCommand.Subcommands.Add(IngestRunCommand.Build(host));
+ingestCommand.Subcommands.Add(IngestListCommand.Build(host));
+ingestCommand.Subcommands.Add(IngestRetryCommand.Build(host));
+rootCommand.Subcommands.Add(ingestCommand);
 
-await host.StopAsync();
-return exitCode;
+return await rootCommand.Parse(args).InvokeAsync();

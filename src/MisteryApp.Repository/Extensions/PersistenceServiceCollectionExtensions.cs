@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MisteryApp.Abstractions.Ingest.Interfaces;
 using MisteryApp.Repository.Contexts;
+using MisteryApp.Repository.Ingest;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +20,8 @@ public static class PersistenceServiceCollectionExtensions
                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(5), errorNumbersToAdd: null);
                     sqlOptions.CommandTimeout(30);
                 }));
+
+        services.AddScoped<IIngestRunRepository, IngestRunRepository>();
 
         return services;
     }

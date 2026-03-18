@@ -30,6 +30,12 @@
     <PackageVersion Include="System.CommandLine" Version="2.0.5" />
   </ItemGroup>
 
+  <ItemGroup Label="AI">
+    <PackageVersion Include="Microsoft.SemanticKernel" Version="1.45.0" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Agents.Core" Version="1.45.0" />
+    <PackageVersion Include="CsvHelper" Version="33.0.1" />
+  </ItemGroup>
+
   <ItemGroup Label="Testing">
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.3.0" />
