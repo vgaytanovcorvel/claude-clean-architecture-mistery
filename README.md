@@ -55,8 +55,69 @@ Then describe what you want to build and Claude Code will follow the clean archi
 | Testing | `Mock<SUT>` (strict), `VerifyAll()`, `FakeTimeProvider` |
 | Virtual methods | All public/internal service and repository methods must be `virtual` |
 
+## Ingest feature — configuration
+
+The `ingest` CLI commands require an Azure OpenAI resource and a SQL Server database.
+
+### 1. Database
+
+Update the connection string in `src/MisteryApp.Cli/appsettings.json`:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=...;Database=MisteryApp;..."
+}
+```
+
+Then apply the migration:
+
+```bash
+dotnet ef migrations add AddIngestTracking --project src/MisteryApp.Repository
+dotnet ef database update --project src/MisteryApp.Repository
+```
+
+### 2. Azure OpenAI
+
+Set the endpoint in `src/MisteryApp.Cli/appsettings.json`:
+
+```json
+"AzureOpenAI": {
+  "Endpoint": "https://<your-resource>.services.ai.azure.com/",
+  "DeploymentName": "gpt-4o-mini"
+}
+```
+
+Store the API key in .NET user secrets (never commit it):
+
+```bash
+dotnet user-secrets set "AzureOpenAI:ApiKey" "<your-key>" --project src/MisteryApp.Cli
+```
+
+Or set it via environment variable:
+
+```bash
+export MISTERYAPP_AZUREOPENAI__APIKEY=<your-key>
+```
+
+### 3. Run
+
+```bash
+# Process a folder of files (dry-run — no DB writes)
+dotnet run --project src/MisteryApp.Cli -- ingest run ./testdata --dry-run
+
+# Run for real
+dotnet run --project src/MisteryApp.Cli -- ingest run ./testdata
+
+# List recent runs
+dotnet run --project src/MisteryApp.Cli -- ingest list
+
+# Retry a failed run
+dotnet run --project src/MisteryApp.Cli -- ingest retry <run-id>
+```
+
 ## Requirements
 
 - .NET 9 SDK
 - SQL Server / LocalDB (for EF Core migrations)
+- Azure OpenAI resource (for ingest feature)
 - [GitHub CLI](https://cli.github.com) + [Claude Code](https://claude.ai/code) (optional but recommended)
