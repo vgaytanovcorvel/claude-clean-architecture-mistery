@@ -69,12 +69,7 @@ Update the connection string in `src/MisteryApp.Cli/appsettings.json`:
 }
 ```
 
-Then apply the migration:
-
-```bash
-dotnet ef migrations add AddIngestTracking --project src/MisteryApp.Repository
-dotnet ef database update --project src/MisteryApp.Repository
-```
+Migrations are applied automatically on first run — no manual `dotnet ef database update` needed.
 
 ### 2. Azure OpenAI
 
