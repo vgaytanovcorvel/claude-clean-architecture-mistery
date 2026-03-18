@@ -10,9 +10,8 @@ public class IngestRejectedFileEntityConfiguration : IEntityTypeConfiguration<In
     {
         builder.ToTable("IngestRejectedFiles");
         builder.HasKey(rf => rf.Id);
-        builder.Property(rf => rf.FilePath).IsRequired().HasMaxLength(2000);
         builder.Property(rf => rf.RejectionReason).IsRequired().HasMaxLength(4000);
-        builder.Property(rf => rf.RunId).IsRequired();
-        builder.HasIndex(rf => rf.RunId);
+        builder.Property(rf => rf.FileId).IsRequired();
+        builder.HasIndex(rf => rf.FileId);
     }
 }

@@ -41,8 +41,8 @@ public static class IngestRunCommand
             try
             {
                 var run = await pipeline.RunAsync(path, dryRun, format, parallel, ct);
-                Console.WriteLine($"Run {run.RunId}: {run.Status} — {run.ProcessedFiles}/{run.TotalFiles} processed, {run.RejectedFiles} rejected.");
-                return run.RejectedFiles > 0 ? 1 : 0;
+                Console.WriteLine($"Run {run.RunId}: {run.Status}.");
+                return run.Status is MisteryApp.Common.Enums.IngestRunStatus.Failed ? 1 : 0;
             }
             catch (NotFoundException ex)
             {

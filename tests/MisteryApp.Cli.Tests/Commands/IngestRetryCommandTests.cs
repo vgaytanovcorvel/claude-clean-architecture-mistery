@@ -36,7 +36,7 @@ public class IngestRetryCommandTests
     {
         // Arrange
         var runId = Guid.NewGuid();
-        var completedRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Completed, "/data", FixedTime, FixedTime, 2, 2, 0);
+        var completedRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Completed, "/data", FixedTime, FixedTime);
 
         pipelineMock
             .Setup(p => p.RetryAsync(runId, false, 4, It.IsAny<CancellationToken>()))
@@ -85,7 +85,7 @@ public class IngestRetryCommandTests
     {
         // Arrange
         var runId = Guid.NewGuid();
-        var completedRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Completed, "/data", FixedTime, FixedTime, 2, 2, 0);
+        var completedRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Completed, "/data", FixedTime, FixedTime);
 
         pipelineMock
             .Setup(p => p.RetryAsync(runId, true, 4, It.IsAny<CancellationToken>()))

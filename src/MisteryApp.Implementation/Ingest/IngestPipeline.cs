@@ -21,7 +21,7 @@ public class IngestPipeline(
 
         var fileList = EnumerateFiles(inputPath).ToList();
         var run = new IngestRun(Guid.NewGuid(), IngestRunStatus.Running, inputPath,
-            timeProvider.GetUtcNow(), null, fileList.Count, 0, 0);
+            timeProvider.GetUtcNow(), null);
 
         if (!dryRun)
             run = await runRepository.IngestRunAddAsync(run, cancellationToken);
@@ -32,9 +32,7 @@ public class IngestPipeline(
         var completedRun = run with
         {
             Status = DetermineStatus(state),
-            CompletedAt = timeProvider.GetUtcNow(),
-            ProcessedFiles = state.ProcessedFiles,
-            RejectedFiles = state.RejectedFiles
+            CompletedAt = timeProvider.GetUtcNow()
         };
 
         if (!dryRun)
@@ -50,24 +48,21 @@ public class IngestPipeline(
         CancellationToken cancellationToken)
     {
         var originalRun = await runRepository.IngestRunSingleByIdAsync(runId, cancellationToken);
-        var rejectedFiles = await runRepository.IngestRejectedFileGetByRunIdAsync(runId, cancellationToken);
-        var filePaths = rejectedFiles.Select(rf => rf.FilePath).ToList();
+        var filePaths = await runRepository.IngestRejectedFilePathsGetByRunIdAsync(runId, cancellationToken);
 
         var retryRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Running, originalRun.InputPath,
-            timeProvider.GetUtcNow(), null, filePaths.Count, 0, 0);
+            timeProvider.GetUtcNow(), null);
 
         if (!dryRun)
             retryRun = await runRepository.IngestRunAddAsync(retryRun, cancellationToken);
 
         var state = new RunState(filePaths.Count);
-        await ProcessFilesAsync(filePaths, retryRun.RunId, FileFormat.Auto, parallel, state, dryRun, cancellationToken);
+        await ProcessFilesAsync(filePaths.ToList(), retryRun.RunId, FileFormat.Auto, parallel, state, dryRun, cancellationToken);
 
         var completedRetryRun = retryRun with
         {
             Status = DetermineStatus(state),
-            CompletedAt = timeProvider.GetUtcNow(),
-            ProcessedFiles = state.ProcessedFiles,
-            RejectedFiles = state.RejectedFiles
+            CompletedAt = timeProvider.GetUtcNow()
         };
 
         if (!dryRun)
@@ -115,7 +110,7 @@ public class IngestPipeline(
             {
                 state.IncrementRejected();
                 if (!dryRun)
-                    await SaveRejectedFileAsync(runId, filePath, result.RejectionReason, cancellationToken);
+                    await runRepository.IngestRejectedFileAddAsync(runId, filePath, result.RejectionReason ?? "Unknown", cancellationToken);
             }
         }
         finally
@@ -124,18 +119,7 @@ public class IngestPipeline(
         }
     }
 
-    private async Task SaveRejectedFileAsync(
-        Guid runId,
-        string filePath,
-        string? reason,
-        CancellationToken cancellationToken)
-    {
-        var rejected = new IngestRejectedFile(
-            Guid.NewGuid(), runId, filePath, reason ?? "Unknown", timeProvider.GetUtcNow());
-        await runRepository.IngestRejectedFileAddAsync(rejected, cancellationToken);
-    }
-
-    public virtual async Task<IReadOnlyList<IngestRun>> GetRunSummariesAsync(int limit, CancellationToken cancellationToken)
+    public virtual async Task<IReadOnlyList<IngestRunSummary>> GetRunSummariesAsync(int limit, CancellationToken cancellationToken)
         => await runRepository.IngestRunGetSummariesAsync(limit, cancellationToken);
 
     private static IEnumerable<string> EnumerateFiles(string inputPath)

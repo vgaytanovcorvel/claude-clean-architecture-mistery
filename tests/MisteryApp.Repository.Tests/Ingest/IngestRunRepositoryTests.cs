@@ -80,14 +80,11 @@ public class IngestRunRepositoryTests
             Status = run.Status,
             InputPath = run.InputPath,
             StartedAt = run.StartedAt,
-            CompletedAt = run.CompletedAt,
-            TotalFiles = run.TotalFiles,
-            ProcessedFiles = run.ProcessedFiles,
-            RejectedFiles = run.RejectedFiles
+            CompletedAt = run.CompletedAt
         });
         await ctx.SaveChangesAsync(cancellationToken);
 
-        var updated = run with { Status = IngestRunStatus.Completed, ProcessedFiles = 5, RejectedFiles = 1, CompletedAt = FixedTime };
+        var updated = run with { Status = IngestRunStatus.Completed, CompletedAt = FixedTime };
 
         contextFactoryMock
             .Setup(f => f.CreateDbContextAsync(It.IsAny<CancellationToken>()))
@@ -104,8 +101,6 @@ public class IngestRunRepositoryTests
 
         // Assert
         result.Status.Should().Be(IngestRunStatus.Completed);
-        result.ProcessedFiles.Should().Be(5);
-        result.RejectedFiles.Should().Be(1);
 
         repositoryMock.VerifyAll();
         contextFactoryMock.VerifyAll();
@@ -183,10 +178,7 @@ public class IngestRunRepositoryTests
                 RunId = Guid.NewGuid(),
                 Status = IngestRunStatus.Completed,
                 InputPath = "/data/input",
-                StartedAt = FixedTime.AddHours(i),
-                TotalFiles = 10,
-                ProcessedFiles = 10,
-                RejectedFiles = 0
+                StartedAt = FixedTime.AddHours(i)
             });
         }
         await ctx.SaveChangesAsync(cancellationToken);
@@ -225,14 +217,9 @@ public class IngestRunRepositoryTests
             RunId = runId,
             Status = IngestRunStatus.Running,
             InputPath = "/data/input",
-            StartedAt = FixedTime,
-            TotalFiles = 10,
-            ProcessedFiles = 0,
-            RejectedFiles = 0
+            StartedAt = FixedTime
         });
         await ctx.SaveChangesAsync(cancellationToken);
-
-        var rejectedFile = new IngestRejectedFile(Guid.NewGuid(), runId, "/data/bad.csv", "Hallucination", FixedTime);
 
         contextFactoryMock
             .Setup(f => f.CreateDbContextAsync(It.IsAny<CancellationToken>()))
@@ -240,16 +227,15 @@ public class IngestRunRepositoryTests
             .Verifiable(Times.Once());
 
         repositoryMock
-            .Setup(r => r.IngestRejectedFileAddAsync(rejectedFile, cancellationToken))
+            .Setup(r => r.IngestRejectedFileAddAsync(runId, "/data/bad.csv", "Hallucination", cancellationToken))
             .CallBase()
             .Verifiable(Times.Once());
 
         // Act
-        var result = await repositoryMock.Object.IngestRejectedFileAddAsync(rejectedFile, cancellationToken);
+        var result = await repositoryMock.Object.IngestRejectedFileAddAsync(runId, "/data/bad.csv", "Hallucination", cancellationToken);
 
         // Assert
-        result.Id.Should().Be(rejectedFile.Id);
-        result.FilePath.Should().Be("/data/bad.csv");
+        result.Id.Should().NotBeEmpty();
         result.RejectionReason.Should().Be("Hallucination");
 
         repositoryMock.VerifyAll();
@@ -257,7 +243,7 @@ public class IngestRunRepositoryTests
     }
 
     private static IngestRun BuildRun() =>
-        new(Guid.NewGuid(), IngestRunStatus.Running, "/data/input", FixedTime, null, 10, 0, 0);
+        new(Guid.NewGuid(), IngestRunStatus.Running, "/data/input", FixedTime, null);
 
     private static ApplicationDbContext BuildInMemoryContext()
     {

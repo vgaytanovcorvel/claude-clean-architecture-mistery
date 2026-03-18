@@ -18,5 +18,5 @@ public interface IIngestPipeline
         int parallel,
         CancellationToken cancellationToken);
 
-    Task<IReadOnlyList<IngestRun>> GetRunSummariesAsync(int limit, CancellationToken cancellationToken);
+    Task<IReadOnlyList<IngestRunSummary>> GetRunSummariesAsync(int limit, CancellationToken cancellationToken);
 }

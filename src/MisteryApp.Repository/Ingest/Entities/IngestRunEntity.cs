@@ -9,8 +9,5 @@ public class IngestRunEntity
     public string InputPath { get; set; } = string.Empty;
     public DateTimeOffset StartedAt { get; set; }
     public DateTimeOffset? CompletedAt { get; set; }
-    public int TotalFiles { get; set; }
-    public int ProcessedFiles { get; set; }
-    public int RejectedFiles { get; set; }
-    public ICollection<IngestRejectedFileEntity> RejectedFileEntities { get; set; } = [];
+    public ICollection<IngestFileEntity> Files { get; set; } = [];
 }

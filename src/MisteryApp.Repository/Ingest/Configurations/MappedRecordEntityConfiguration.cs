@@ -9,17 +9,12 @@ public class MappedRecordEntityConfiguration : IEntityTypeConfiguration<MappedRe
     public void Configure(EntityTypeBuilder<MappedRecordEntity> builder)
     {
         builder.HasKey(r => r.Id);
-        builder.Property(r => r.FilePath).IsRequired().HasMaxLength(1000);
         builder.Property(r => r.ExternalId).HasMaxLength(200);
         builder.Property(r => r.Description).HasMaxLength(2000);
         builder.Property(r => r.Source).HasMaxLength(500);
         builder.Property(r => r.Category).HasMaxLength(200);
         builder.Property(r => r.Value).HasColumnType("decimal(18,4)");
-        builder.HasOne(r => r.Run)
-               .WithMany()
-               .HasForeignKey(r => r.RunId)
-               .OnDelete(DeleteBehavior.Cascade);
-        builder.HasIndex(r => r.RunId);
+        builder.HasIndex(r => r.FileId);
         builder.HasIndex(r => r.IngestedAt);
     }
 }

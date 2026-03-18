@@ -31,9 +31,6 @@ public class IngestRunRepository(
         entity.Status = run.Status;
         entity.InputPath = run.InputPath;
         entity.CompletedAt = run.CompletedAt;
-        entity.TotalFiles = run.TotalFiles;
-        entity.ProcessedFiles = run.ProcessedFiles;
-        entity.RejectedFiles = run.RejectedFiles;
 
         await dbContext.SaveChangesAsync(cancellationToken);
         return MapToDomain(entity);
@@ -54,48 +51,62 @@ public class IngestRunRepository(
         return entity is null ? null : MapToDomain(entity);
     }
 
-    public virtual async Task<IReadOnlyList<IngestRun>> IngestRunGetSummariesAsync(int limit, CancellationToken cancellationToken)
+    public virtual async Task<IReadOnlyList<IngestRunSummary>> IngestRunGetSummariesAsync(int limit, CancellationToken cancellationToken)
     {
         await using var dbContext = await CreateContextAsync(cancellationToken);
         return await dbContext.IngestRuns
             .AsNoTracking()
             .OrderByDescending(r => r.StartedAt)
             .Take(limit)
-            .Select(r => new IngestRun(
+            .Select(r => new IngestRunSummary(
                 r.RunId,
                 r.Status,
                 r.InputPath,
                 r.StartedAt,
                 r.CompletedAt,
-                r.TotalFiles,
-                r.ProcessedFiles,
-                r.RejectedFiles))
+                r.Files.Count,
+                r.Files.Count(f => f.RejectedFile == null),
+                r.Files.Count(f => f.RejectedFile != null)))
             .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<IngestRejectedFile> IngestRejectedFileAddAsync(IngestRejectedFile rejectedFile, CancellationToken cancellationToken)
+    public virtual async Task<IngestRejectedFile> IngestRejectedFileAddAsync(
+        Guid runId,
+        string filePath,
+        string rejectionReason,
+        CancellationToken cancellationToken)
     {
         await using var dbContext = await CreateContextAsync(cancellationToken);
-        var entity = new IngestRejectedFileEntity
+
+        var fileEntity = new IngestFileEntity
         {
-            Id = rejectedFile.Id,
-            RunId = rejectedFile.RunId,
-            FilePath = rejectedFile.FilePath,
-            RejectionReason = rejectedFile.RejectionReason,
-            RejectedAt = rejectedFile.RejectedAt
+            Id = Guid.NewGuid(),
+            RunId = runId,
+            FilePath = filePath,
+            ProcessedAt = DateTimeOffset.UtcNow
         };
-        await dbContext.IngestRejectedFiles.AddAsync(entity, cancellationToken);
+        await dbContext.IngestFiles.AddAsync(fileEntity, cancellationToken);
+
+        var rejectedEntity = new IngestRejectedFileEntity
+        {
+            Id = Guid.NewGuid(),
+            FileId = fileEntity.Id,
+            RejectionReason = rejectionReason
+        };
+        await dbContext.IngestRejectedFiles.AddAsync(rejectedEntity, cancellationToken);
+
         await dbContext.SaveChangesAsync(cancellationToken);
-        return MapRejectedFileToDomain(entity);
+
+        return new IngestRejectedFile(rejectedEntity.Id, fileEntity.Id, rejectionReason);
     }
 
-    public virtual async Task<IReadOnlyList<IngestRejectedFile>> IngestRejectedFileGetByRunIdAsync(Guid runId, CancellationToken cancellationToken)
+    public virtual async Task<IReadOnlyList<string>> IngestRejectedFilePathsGetByRunIdAsync(Guid runId, CancellationToken cancellationToken)
     {
         await using var dbContext = await CreateContextAsync(cancellationToken);
-        return await dbContext.IngestRejectedFiles
+        return await dbContext.IngestFiles
             .AsNoTracking()
-            .Where(rf => rf.RunId == runId)
-            .Select(rf => new IngestRejectedFile(rf.Id, rf.RunId, rf.FilePath, rf.RejectionReason, rf.RejectedAt))
+            .Where(f => f.RunId == runId && f.RejectedFile != null)
+            .Select(f => f.FilePath)
             .ToListAsync(cancellationToken);
     }
 
@@ -106,11 +117,20 @@ public class IngestRunRepository(
         CancellationToken cancellationToken)
     {
         await using var dbContext = await CreateContextAsync(cancellationToken);
-        var entities = records.Select(record => new MappedRecordEntity
+
+        var fileEntity = new IngestFileEntity
         {
             Id = Guid.NewGuid(),
             RunId = runId,
             FilePath = filePath,
+            ProcessedAt = DateTimeOffset.UtcNow
+        };
+        await dbContext.IngestFiles.AddAsync(fileEntity, cancellationToken);
+
+        var entities = records.Select(record => new MappedRecordEntity
+        {
+            Id = Guid.NewGuid(),
+            FileId = fileEntity.Id,
             ExternalId = record.Id,
             Timestamp = record.Timestamp,
             Value = record.Value,
@@ -120,28 +140,22 @@ public class IngestRunRepository(
             IngestedAt = DateTimeOffset.UtcNow
         }).ToList();
         dbContext.MappedRecords.AddRange(entities);
+
         await dbContext.SaveChangesAsync(cancellationToken);
         return entities.Select(MapMappedRecordToDomain).ToList();
     }
 
-    private IngestRun MapToDomain(IngestRunEntity entity) =>
-        new(entity.RunId, entity.Status, entity.InputPath, entity.StartedAt,
-            entity.CompletedAt, entity.TotalFiles, entity.ProcessedFiles, entity.RejectedFiles);
+    private static IngestRun MapToDomain(IngestRunEntity entity) =>
+        new(entity.RunId, entity.Status, entity.InputPath, entity.StartedAt, entity.CompletedAt);
 
-    private IngestRejectedFile MapRejectedFileToDomain(IngestRejectedFileEntity entity) =>
-        new(entity.Id, entity.RunId, entity.FilePath, entity.RejectionReason, entity.RejectedAt);
-
-    private IngestRunEntity MapToEntity(IngestRun run) =>
+    private static IngestRunEntity MapToEntity(IngestRun run) =>
         new()
         {
             RunId = run.RunId,
             Status = run.Status,
             InputPath = run.InputPath,
             StartedAt = run.StartedAt,
-            CompletedAt = run.CompletedAt,
-            TotalFiles = run.TotalFiles,
-            ProcessedFiles = run.ProcessedFiles,
-            RejectedFiles = run.RejectedFiles
+            CompletedAt = run.CompletedAt
         };
 
     private static MappedRecord MapMappedRecordToDomain(MappedRecordEntity entity) =>

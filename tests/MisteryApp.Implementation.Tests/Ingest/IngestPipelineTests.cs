@@ -36,8 +36,8 @@ public class IngestPipelineTests
         // Arrange
         var tmpFile = CreateTempFile();
         var successResult = new FileProcessResult(tmpFile, true, [new MappedRecord("1", null, 1m, null, null, null)], null);
-        var savedRun = BuildRun(tmpFile, IngestRunStatus.Running, 1, 0, 0);
-        var updatedRun = savedRun with { Status = IngestRunStatus.Completed, ProcessedFiles = 1, CompletedAt = FixedTime };
+        var savedRun = BuildRun(tmpFile, IngestRunStatus.Running);
+        var updatedRun = savedRun with { Status = IngestRunStatus.Completed, CompletedAt = FixedTime };
 
         pipelineMock
             .Setup(p => p.RunAsync(tmpFile, false, FileFormat.Auto, 4, cancellationToken))
@@ -45,7 +45,7 @@ public class IngestPipelineTests
             .Verifiable(Times.Once());
 
         runRepositoryMock
-            .Setup(r => r.IngestRunAddAsync(It.Is<IngestRun>(run => run.InputPath == tmpFile && run.TotalFiles == 1), cancellationToken))
+            .Setup(r => r.IngestRunAddAsync(It.Is<IngestRun>(run => run.InputPath == tmpFile), cancellationToken))
             .ReturnsAsync(savedRun)
             .Verifiable(Times.Once());
 
@@ -71,7 +71,6 @@ public class IngestPipelineTests
 
             // Assert
             result.Status.Should().Be(IngestRunStatus.Completed);
-            result.RejectedFiles.Should().Be(0);
 
             pipelineMock.VerifyAll();
             fileProcessorMock.VerifyAll();
@@ -95,8 +94,8 @@ public class IngestPipelineTests
 
         var successResult = new FileProcessResult(file1, true, [new MappedRecord("1", null, 1m, null, null, null)], null);
         var failResult = new FileProcessResult(file2, false, null, "Hallucination detected");
-        var savedRun = BuildRun(tmpDir, IngestRunStatus.Running, 2, 0, 0);
-        var updatedRun = savedRun with { Status = IngestRunStatus.PartialSuccess, ProcessedFiles = 2, RejectedFiles = 1, CompletedAt = FixedTime };
+        var savedRun = BuildRun(tmpDir, IngestRunStatus.Running);
+        var updatedRun = savedRun with { Status = IngestRunStatus.PartialSuccess, CompletedAt = FixedTime };
 
         pipelineMock
             .Setup(p => p.RunAsync(tmpDir, false, FileFormat.Auto, 4, cancellationToken))
@@ -124,8 +123,8 @@ public class IngestPipelineTests
             .Verifiable(Times.Once());
 
         runRepositoryMock
-            .Setup(r => r.IngestRejectedFileAddAsync(It.IsAny<IngestRejectedFile>(), cancellationToken))
-            .Returns((IngestRejectedFile rf, CancellationToken _) => Task.FromResult(rf))
+            .Setup(r => r.IngestRejectedFileAddAsync(savedRun.RunId, file2, "Hallucination detected", cancellationToken))
+            .ReturnsAsync(new IngestRejectedFile(Guid.NewGuid(), Guid.NewGuid(), "Hallucination detected"))
             .Verifiable(Times.Once());
 
         runRepositoryMock
@@ -193,14 +192,11 @@ public class IngestPipelineTests
         // Arrange
         var runId = Guid.NewGuid();
         var tmpFile = CreateTempFile();
-        var originalRun = BuildRun(tmpFile, IngestRunStatus.PartialSuccess, 2, 2, 1);
-        var rejectedFiles = new List<IngestRejectedFile>
-        {
-            new(Guid.NewGuid(), runId, tmpFile, "Some issue", FixedTime)
-        };
+        var originalRun = BuildRun(tmpFile, IngestRunStatus.PartialSuccess);
+        var rejectedFilePaths = new List<string> { tmpFile };
         var successResult = new FileProcessResult(tmpFile, true, [new MappedRecord("1", null, 1m, null, null, null)], null);
-        var savedRetryRun = BuildRun(tmpFile, IngestRunStatus.Running, 1, 0, 0);
-        var updatedRetryRun = savedRetryRun with { Status = IngestRunStatus.Completed, ProcessedFiles = 1, CompletedAt = FixedTime };
+        var savedRetryRun = BuildRun(tmpFile, IngestRunStatus.Running);
+        var updatedRetryRun = savedRetryRun with { Status = IngestRunStatus.Completed, CompletedAt = FixedTime };
 
         pipelineMock
             .Setup(p => p.RetryAsync(runId, false, 4, cancellationToken))
@@ -213,8 +209,8 @@ public class IngestPipelineTests
             .Verifiable(Times.Once());
 
         runRepositoryMock
-            .Setup(r => r.IngestRejectedFileGetByRunIdAsync(runId, cancellationToken))
-            .ReturnsAsync(rejectedFiles)
+            .Setup(r => r.IngestRejectedFilePathsGetByRunIdAsync(runId, cancellationToken))
+            .ReturnsAsync(rejectedFilePaths)
             .Verifiable(Times.Once());
 
         runRepositoryMock
@@ -285,7 +281,7 @@ public class IngestPipelineTests
     {
         // Arrange
         var emptyDir = CreateTempDirectory();
-        var savedRun = BuildRun(emptyDir, IngestRunStatus.Running, 0, 0, 0);
+        var savedRun = BuildRun(emptyDir, IngestRunStatus.Running);
         var updatedRun = savedRun with { Status = IngestRunStatus.Failed, CompletedAt = FixedTime };
 
         pipelineMock
@@ -325,9 +321,9 @@ public class IngestPipelineTests
     public async Task GetRunSummariesAsync_ShouldDelegateToRepository_WhenCalled()
     {
         // Arrange
-        var runs = new List<IngestRun>
+        var summaries = new List<IngestRunSummary>
         {
-            BuildRun("/data", IngestRunStatus.Completed, 5, 5, 0)
+            BuildSummary("/data", IngestRunStatus.Completed, 5, 5, 0)
         };
 
         pipelineMock
@@ -337,21 +333,24 @@ public class IngestPipelineTests
 
         runRepositoryMock
             .Setup(r => r.IngestRunGetSummariesAsync(10, cancellationToken))
-            .ReturnsAsync(runs)
+            .ReturnsAsync(summaries)
             .Verifiable(Times.Once());
 
         // Act
         var result = await pipelineMock.Object.GetRunSummariesAsync(10, cancellationToken);
 
         // Assert
-        result.Should().BeEquivalentTo(runs);
+        result.Should().BeEquivalentTo(summaries);
 
         pipelineMock.VerifyAll();
         runRepositoryMock.VerifyAll();
         fileProcessorMock.VerifyAll();
     }
 
-    private static IngestRun BuildRun(string path, IngestRunStatus status, int total, int processed, int rejected) =>
+    private static IngestRun BuildRun(string path, IngestRunStatus status) =>
+        new(Guid.NewGuid(), status, path, FixedTime, null);
+
+    private static IngestRunSummary BuildSummary(string path, IngestRunStatus status, int total, int processed, int rejected) =>
         new(Guid.NewGuid(), status, path, FixedTime, null, total, processed, rejected);
 
     private static string CreateTempFile()

@@ -3,8 +3,7 @@ namespace MisteryApp.Repository.Ingest.Entities;
 public class MappedRecordEntity
 {
     public Guid Id { get; set; }
-    public Guid RunId { get; set; }
-    public string FilePath { get; set; } = string.Empty;
+    public Guid FileId { get; set; }
     public string? ExternalId { get; set; }
     public DateTimeOffset? Timestamp { get; set; }
     public decimal? Value { get; set; }
@@ -12,6 +11,5 @@ public class MappedRecordEntity
     public string? Source { get; set; }
     public string? Category { get; set; }
     public DateTimeOffset IngestedAt { get; set; }
-
-    public IngestRunEntity Run { get; set; } = null!;
+    public IngestFileEntity File { get; set; } = null!;
 }

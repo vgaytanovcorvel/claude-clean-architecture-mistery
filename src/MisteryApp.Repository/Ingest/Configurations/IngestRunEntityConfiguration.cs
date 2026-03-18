@@ -13,9 +13,9 @@ public class IngestRunEntityConfiguration : IEntityTypeConfiguration<IngestRunEn
         builder.Property(r => r.InputPath).IsRequired().HasMaxLength(2000);
         builder.Property(r => r.Status).HasConversion<int>().HasColumnType("int");
         builder.HasIndex(r => r.StartedAt);
-        builder.HasMany(r => r.RejectedFileEntities)
-            .WithOne(rf => rf.IngestRun)
-            .HasForeignKey(rf => rf.RunId)
+        builder.HasMany(r => r.Files)
+            .WithOne(f => f.Run)
+            .HasForeignKey(f => f.RunId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

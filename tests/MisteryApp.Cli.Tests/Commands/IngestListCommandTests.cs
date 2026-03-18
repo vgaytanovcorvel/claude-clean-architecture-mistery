@@ -34,7 +34,7 @@ public class IngestListCommandTests
     public async Task IngestList_ShouldExitZero_WhenRunsExist()
     {
         // Arrange
-        var summaries = new List<IngestRun>
+        var summaries = new List<IngestRunSummary>
         {
             new(Guid.NewGuid(), IngestRunStatus.Completed, "/data", FixedTime, FixedTime, 5, 5, 0)
         };
@@ -61,7 +61,7 @@ public class IngestListCommandTests
     public async Task IngestList_ShouldRespectLimitOption_WhenProvided()
     {
         // Arrange
-        var summaries = new List<IngestRun>();
+        var summaries = new List<IngestRunSummary>();
 
         pipelineMock
             .Setup(r => r.GetRunSummariesAsync(5, It.IsAny<CancellationToken>()))

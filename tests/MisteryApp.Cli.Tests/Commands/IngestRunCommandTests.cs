@@ -35,7 +35,7 @@ public class IngestRunCommandTests
     {
         // Arrange
         const string path = "/data/input";
-        var completedRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Completed, path, FixedTime, FixedTime, 3, 3, 0);
+        var completedRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Completed, path, FixedTime, FixedTime);
 
         pipelineMock
             .Setup(p => p.RunAsync(path, false, FileFormat.Auto, 4, It.IsAny<CancellationToken>()))
@@ -56,15 +56,15 @@ public class IngestRunCommandTests
     }
 
     [TestMethod]
-    public async Task IngestRun_ShouldExitOne_WhenSomeRejections()
+    public async Task IngestRun_ShouldExitOne_WhenRunFailed()
     {
         // Arrange
         const string path = "/data/input";
-        var partialRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.PartialSuccess, path, FixedTime, FixedTime, 5, 5, 2);
+        var failedRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Failed, path, FixedTime, FixedTime);
 
         pipelineMock
             .Setup(p => p.RunAsync(path, false, FileFormat.Auto, 4, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(partialRun)
+            .ReturnsAsync(failedRun)
             .Verifiable(Times.Once());
 
         var rootCommand = new RootCommand();
@@ -85,7 +85,7 @@ public class IngestRunCommandTests
     {
         // Arrange
         const string path = "/data/input";
-        var completedRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Completed, path, FixedTime, FixedTime, 1, 1, 0);
+        var completedRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Completed, path, FixedTime, FixedTime);
 
         pipelineMock
             .Setup(p => p.RunAsync(path, true, FileFormat.Auto, 4, It.IsAny<CancellationToken>()))
@@ -110,7 +110,7 @@ public class IngestRunCommandTests
     {
         // Arrange
         const string path = "/data";
-        var completedRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Completed, path, FixedTime, FixedTime, 1, 1, 0);
+        var completedRun = new IngestRun(Guid.NewGuid(), IngestRunStatus.Completed, path, FixedTime, FixedTime);
 
         pipelineMock
             .Setup(p => p.RunAsync(path, false, FileFormat.Csv, 4, It.IsAny<CancellationToken>()))

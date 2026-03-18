@@ -7,6 +7,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     : DbContext(options)
 {
     public DbSet<IngestRunEntity> IngestRuns => Set<IngestRunEntity>();
+    public DbSet<IngestFileEntity> IngestFiles => Set<IngestFileEntity>();
     public DbSet<IngestRejectedFileEntity> IngestRejectedFiles => Set<IngestRejectedFileEntity>();
     public DbSet<MappedRecordEntity> MappedRecords => Set<MappedRecordEntity>();
 
