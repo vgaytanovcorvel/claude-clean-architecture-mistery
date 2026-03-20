@@ -8,7 +8,7 @@ A pre-scaffolded C# clean architecture solution you can clone and immediately st
 - **8 test projects** (MSTest + Moq + FluentAssertions)
 - **Central package management** via `Directory.Packages.props`
 - **Per-module `CLAUDE.md` files** — Claude Code reads these automatically to understand each layer's rules
-- **22 architecture rule files** under `rules/` covering coding style, persistence, testing, security, and more
+- **26 architecture rule files** under `rules/` covering coding style, persistence, testing, security, and more
 
 ## Architecture
 
