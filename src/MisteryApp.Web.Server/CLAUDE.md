@@ -6,7 +6,6 @@ SPA hosting project — serves the API alongside static Angular files, with a fa
 
 @../../rules/common/coding-style.md
 @../../rules/common/logging.md
-@../../rules/common/patterns.md
 @../../rules/common/security.md
 @../../rules/csharp/coding-style.md
 @../../rules/csharp/persistence.md
