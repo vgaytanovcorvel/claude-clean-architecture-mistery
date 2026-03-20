@@ -50,3 +50,8 @@ Thumbs.db
 src/*.client/node_modules/
 src/*.client/dist/
 src/*.client/.angular/
+
+## React / Vite
+src/MisteryApp.Web.React/node_modules/
+src/MisteryApp.Web.React/dist/
+src/MisteryApp.Web.React/.vite/
