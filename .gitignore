@@ -31,10 +31,11 @@ nuget.config.local
 !.vscode/launch.json
 !.vscode/tasks.json
 
-# Node / Angular
+# Node / Angular / Vite
 node_modules/
 dist/
 .angular/
+.vite/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
