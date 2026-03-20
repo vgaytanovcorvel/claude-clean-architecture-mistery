@@ -1,52 +1,58 @@
-## .NET
+# .NET
 bin/
 obj/
 *.user
 *.suo
 .vs/
-*.rsuser
-*.DotSettings.user
-
-## Rider
-.idea/
-
-## Rider / VS Code
-*.launch
-
-## Test results
+*.ncrunchsolution
+*.ncrunchproject
 TestResults/
 coverage/
 *.coverage
 *.coveragexml
-*.trx
 
-## EF Core migrations output (keep migrations source, not snapshots from other branches)
-# Uncomment if you want to ignore migrations:
-# src/*/Migrations/
+# EF Core
+# Migrations are checked in; ignore nothing here by default
 
-## NuGet
+# NuGet
 *.nupkg
 *.snupkg
+.nuget/
 packages/
-!**/packages/repositories.config
+nuget.config.local
 
-## Build artifacts
-artifacts/
-publish/
+# Rider / JetBrains
+.idea/
+*.sln.iml
 
-## Environment / secrets
-*.env
-appsettings.*.local.json
+# Visual Studio Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp/
+.pnp.js
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+appsettings.Local.json
+appsettings.*.Local.json
 secrets.json
 
-## Claude Code
-.claude/settings.local.json
-
-## OS
+# OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
-## Angular
-src/*.client/node_modules/
-src/*.client/dist/
-src/*.client/.angular/
+# Claude Code local settings
+.claude/settings.local.json
