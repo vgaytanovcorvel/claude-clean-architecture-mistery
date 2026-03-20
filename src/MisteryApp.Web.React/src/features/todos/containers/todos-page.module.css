@@ -1,0 +1,117 @@
+.page {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-6);
+}
+
+/* ── Page header ─────────────────────────────────────── */
+.pageHeader {
+  display:     flex;
+  align-items: baseline;
+  gap:         var(--space-4);
+}
+
+.pageTitle {
+  font-size:   var(--text-3xl);
+  font-weight: 800;
+  color:       var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.badge {
+  font-size:     var(--text-sm);
+  font-weight:   500;
+  color:         var(--text-secondary);
+  background:    var(--glass-bg);
+  border:        1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  padding:       var(--space-1) var(--space-3);
+}
+
+/* ── Card ────────────────────────────────────────────── */
+.card {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ── Filters ─────────────────────────────────────────── */
+.filterBar {
+  display:         flex;
+  align-items:     center;
+  gap:             var(--space-1);
+  padding:         var(--space-2) var(--space-4);
+  border-block-end: 1px solid var(--glass-border);
+}
+
+.filterBtn {
+  background:    none;
+  border:        none;
+  color:         var(--text-secondary);
+  font-size:     var(--text-sm);
+  font-weight:   500;
+  cursor:        pointer;
+  padding:       var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .filterBtn {
+    transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+  }
+}
+
+.filterBtn:hover {
+  color:      var(--text-primary);
+  background: var(--glass-bg);
+}
+
+.filterBtnActive {
+  color:       var(--purple-300);
+  background:  rgba(139, 92, 246, 0.15);
+}
+
+/* ── List ────────────────────────────────────────────── */
+.list {
+  list-style: none;
+  margin:     0;
+  padding:    0;
+}
+
+/* ── Empty / Loading ─────────────────────────────────── */
+.emptyState {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  gap:             var(--space-3);
+  padding:         var(--space-12) var(--space-8);
+}
+
+.emptyIcon {
+  font-size: var(--text-4xl);
+  opacity:   0.25;
+}
+
+.emptyText {
+  font-size: var(--text-sm);
+  color:     var(--text-muted);
+  text-align: center;
+}
+
+.spinner {
+  inline-size:  36px;
+  block-size:   36px;
+  border:       3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--purple-400);
+  border-radius: var(--radius-full);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .spinner {
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

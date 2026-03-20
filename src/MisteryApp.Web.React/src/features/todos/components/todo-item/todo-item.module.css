@@ -1,0 +1,147 @@
+.item {
+  display:       flex;
+  align-items:   center;
+  gap:           var(--space-3);
+  padding:       var(--space-4) var(--space-5);
+  border-block-end: 1px solid rgba(255, 255, 255, 0.06);
+  position:      relative;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .item {
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+}
+
+.item:last-child {
+  border-block-end: none;
+}
+
+.item:hover {
+  background: var(--glass-bg);
+}
+
+.item:hover .editBtn,
+.item:hover .deleteBtn {
+  opacity: 1;
+}
+
+/* ── Checkbox ─────────────────────────────────────────── */
+.checkbox {
+  flex-shrink:     0;
+  inline-size:     22px;
+  block-size:      22px;
+  border:          2px solid var(--glass-border);
+  border-radius:   var(--radius-sm);
+  background:      var(--glass-bg);
+  cursor:          pointer;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  position:        relative;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .checkbox {
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background   var(--duration-fast) var(--ease-out),
+      box-shadow   var(--duration-fast) var(--ease-out);
+  }
+}
+
+.checkbox:hover {
+  border-color: var(--purple-500);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.completed .checkbox {
+  background:  linear-gradient(135deg, var(--purple-500), var(--pink-500));
+  border-color: transparent;
+  box-shadow:  0 0 12px rgba(139, 92, 246, 0.4);
+}
+
+.checkIcon {
+  inline-size: 12px;
+  block-size:  10px;
+  color:       var(--white);
+}
+
+/* ── Text ─────────────────────────────────────────────── */
+.text {
+  flex:          1;
+  font-size:     var(--text-base);
+  color:         var(--text-primary);
+  min-inline-size: 0;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+}
+
+.completed .text {
+  color:           var(--text-muted);
+  text-decoration: line-through;
+}
+
+/* ── Edit input ───────────────────────────────────────── */
+.editInput {
+  flex:          1;
+  background:    rgba(139, 92, 246, 0.1);
+  border:        1px solid var(--purple-500);
+  border-radius: var(--radius-sm);
+  color:         var(--text-primary);
+  font-size:     var(--text-base);
+  padding:       var(--space-1) var(--space-3);
+  outline:       none;
+  box-shadow:    0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+/* ── Action buttons ───────────────────────────────────── */
+.actions {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-1);
+  flex-shrink: 0;
+}
+
+.editBtn,
+.deleteBtn {
+  background:    none;
+  border:        none;
+  cursor:        pointer;
+  padding:       var(--space-1);
+  border-radius: var(--radius-sm);
+  display:       flex;
+  align-items:   center;
+  opacity:       0;
+  line-height:   1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .editBtn,
+  .deleteBtn {
+    transition: opacity var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+  }
+}
+
+.editBtn svg,
+.deleteBtn svg {
+  inline-size: 14px;
+  block-size:  14px;
+}
+
+.editBtn {
+  color: var(--text-secondary);
+}
+
+.editBtn:hover {
+  color: var(--purple-400);
+}
+
+.deleteBtn {
+  color: var(--text-muted);
+}
+
+.deleteBtn:hover {
+  color: var(--red-400);
+}

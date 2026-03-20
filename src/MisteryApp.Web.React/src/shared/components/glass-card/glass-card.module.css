@@ -1,0 +1,18 @@
+/* Public CSS API:
+ *   --card-bg      override background
+ *   --card-border  override border color
+ */
+.card {
+  background:      var(--card-bg, var(--glass-bg));
+  border:          1px solid var(--card-border, var(--glass-border));
+  border-radius:   var(--radius-lg);
+  box-shadow:      var(--glass-shadow);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  padding:         var(--space-8);
+}
+
+.elevated {
+  --card-bg:     var(--glass-bg-strong);
+  box-shadow:    var(--glass-shadow), 0 0 60px rgba(139, 92, 246, 0.08);
+}

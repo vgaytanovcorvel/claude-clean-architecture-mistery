@@ -1,0 +1,183 @@
+.page {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-6);
+}
+
+/* ── Page header ─────────────────────────────────────── */
+.pageHeader {
+  display: flex;
+  align-items: baseline;
+}
+
+.pageTitle {
+  font-size:   var(--text-3xl);
+  font-weight: 800;
+  color:       var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+/* ── Grid ────────────────────────────────────────────── */
+.grid {
+  display:               grid;
+  grid-template-columns: 280px 1fr;
+  gap:                   var(--space-6);
+  align-items:           start;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Avatar card ─────────────────────────────────────── */
+.avatarCard {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  text-align:     center;
+  gap:            var(--space-3);
+}
+
+.avatarRing {
+  inline-size:     80px;
+  block-size:      80px;
+  border-radius:   var(--radius-full);
+  background:      linear-gradient(135deg, var(--purple-600), var(--pink-500));
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  box-shadow:      0 0 40px rgba(139, 92, 246, 0.5);
+  flex-shrink:     0;
+}
+
+.avatarLetter {
+  font-size:   var(--text-3xl);
+  font-weight: 800;
+  color:       var(--white);
+}
+
+.avatarName {
+  font-size:   var(--text-lg);
+  font-weight: 700;
+  color:       var(--text-primary);
+}
+
+.avatarEmail {
+  font-size: var(--text-sm);
+  color:     var(--text-secondary);
+  word-break: break-all;
+}
+
+.metaRow {
+  display:         flex;
+  flex-direction:  column;
+  gap:             var(--space-1);
+  align-items:     center;
+  margin-block-start: var(--space-2);
+  padding-block-start: var(--space-4);
+  border-block-start:  1px solid var(--glass-border);
+  inline-size:     100%;
+}
+
+.metaLabel {
+  font-size: var(--text-xs);
+  color:     var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.metaValue {
+  font-size:   var(--text-sm);
+  font-weight: 500;
+  color:       var(--text-secondary);
+}
+
+/* ── Form card ───────────────────────────────────────── */
+.formCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.sectionTitle {
+  font-size:   var(--text-lg);
+  font-weight: 700;
+  color:       var(--text-primary);
+}
+
+.form {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-5);
+}
+
+/* ── Status messages ─────────────────────────────────── */
+.errorMsg {
+  background:    rgba(239, 68, 68, 0.12);
+  border:        1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-md);
+  padding:       var(--space-3) var(--space-4);
+  font-size:     var(--text-sm);
+  color:         var(--text-error);
+}
+
+.successMsg {
+  background:    rgba(74, 222, 128, 0.12);
+  border:        1px solid rgba(74, 222, 128, 0.3);
+  border-radius: var(--radius-md);
+  padding:       var(--space-3) var(--space-4);
+  font-size:     var(--text-sm);
+  color:         var(--text-success);
+}
+
+/* ── Textarea ────────────────────────────────────────── */
+.textareaGroup {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-2);
+  position:       relative;
+}
+
+.textareaLabel {
+  font-size:   var(--text-sm);
+  font-weight: 500;
+  color:       var(--text-secondary);
+  letter-spacing: 0.03em;
+}
+
+.textarea {
+  background:    var(--glass-bg);
+  border:        1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color:         var(--text-primary);
+  font-size:     var(--text-base);
+  padding:       var(--space-3) var(--space-4);
+  resize:        vertical;
+  min-block-size: 100px;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .textarea {
+    transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+  }
+}
+
+.textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.textarea:focus {
+  outline:      none;
+  border-color: var(--glass-border-focus);
+  box-shadow:   0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.charCount {
+  font-size:   var(--text-xs);
+  color:       var(--text-muted);
+  text-align:  end;
+}
