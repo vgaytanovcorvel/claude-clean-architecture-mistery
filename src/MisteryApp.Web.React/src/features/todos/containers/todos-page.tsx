@@ -21,14 +21,18 @@ export function TodosPage() {
 
   const [todos,   setTodos]   = useState<Todo[]>([])
   const [filter,  setFilter]  = useState<TodoFilter>('all')
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [adding,  setAdding]  = useState(false)
 
   const loadTodos = useCallback(async () => {
     if (!currentUser) return
-    const result = await todoService.getTodos(currentUser.id, filter)
-    if (result.success) setTodos([...result.value])
-    setLoading(false)
+    setLoading(true)
+    try {
+      const result = await todoService.getTodos(currentUser.id, filter)
+      if (result.success) setTodos([...result.value])
+    } finally {
+      setLoading(false)
+    }
   }, [currentUser, todoService, filter])
 
   useEffect(() => { void loadTodos() }, [loadTodos])
