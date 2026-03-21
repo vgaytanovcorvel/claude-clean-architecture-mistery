@@ -1,0 +1,51 @@
+.o-page {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-block-size: 100dvh;
+}
+
+.o-page__body {
+  padding-block-start: calc(var(--nav-height) + var(--space-8));
+  padding-block-end: var(--space-8);
+  padding-inline: var(--space-4);
+}
+
+.o-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.o-grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.o-grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.o-flex {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.o-flex--center {
+  align-items: center;
+  justify-content: center;
+}
+
+.o-flex--between {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.o-center {
+  display: grid;
+  place-items: center;
+}
+
+.o-auth-layout {
+  display: grid;
+  place-items: center;
+  min-block-size: 100dvh;
+  padding: var(--space-4);
+}

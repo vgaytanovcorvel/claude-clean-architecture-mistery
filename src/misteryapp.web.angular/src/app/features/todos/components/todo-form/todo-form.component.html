@@ -1,0 +1,68 @@
+<form class="form" [formGroup]="form" (ngSubmit)="handleSubmit()">
+  <div class="form__header">
+    <h2 class="form__title">{{ isEditing ? 'Edit Todo' : 'New Todo' }}</h2>
+    <button
+      type="button"
+      class="form__close"
+      (click)="handleCancel()"
+      aria-label="Close form"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <app-glass-input
+    label="Title"
+    type="text"
+    placeholder="What needs to be done?"
+    formControlName="title"
+    [error]="getError('title')"
+  />
+
+  <app-glass-input
+    label="Description (optional)"
+    type="text"
+    placeholder="Add some details…"
+    formControlName="description"
+  />
+
+  <div class="form__field">
+    <label class="form__label">Priority</label>
+    <div class="form__priorities">
+      @for (p of priorities; track p) {
+        <button
+          type="button"
+          class="priority-btn priority-btn--{{ p }}"
+          [class.priority-btn--active]="form.get('priority')?.value === p"
+          (click)="form.get('priority')?.setValue(p)"
+        >
+          {{ priorityLabels[p] }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (serverError()) {
+    <div class="form__error" role="alert">{{ serverError() }}</div>
+  }
+
+  <div class="form__actions">
+    <app-glass-button
+      type="button"
+      variant="ghost"
+      (clicked)="handleCancel()"
+    >
+      Cancel
+    </app-glass-button>
+    <app-glass-button
+      type="submit"
+      variant="primary"
+      [disabled]="isLoading()"
+    >
+      {{ isEditing ? 'Save Changes' : 'Create Todo' }}
+    </app-glass-button>
+  </div>
+</form>

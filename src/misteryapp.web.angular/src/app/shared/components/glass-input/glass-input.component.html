@@ -1,0 +1,18 @@
+<div class="wrapper" [class.wrapper--error]="error()">
+  @if (label()) {
+    <label class="label" [for]="inputId">{{ label() }}</label>
+  }
+  <input
+    class="input"
+    [id]="inputId"
+    [type]="type()"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    [disabled]="isDisabled()"
+    (input)="handleInput($event)"
+    (blur)="handleBlur()"
+  />
+  @if (error()) {
+    <span class="error" role="alert">{{ error() }}</span>
+  }
+</div>

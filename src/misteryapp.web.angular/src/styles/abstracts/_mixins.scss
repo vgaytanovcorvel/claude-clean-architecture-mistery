@@ -1,0 +1,77 @@
+// Breakpoints
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+
+@mixin sm { @media (min-width: $bp-sm) { @content; } }
+@mixin md { @media (min-width: $bp-md) { @content; } }
+@mixin lg { @media (min-width: $bp-lg) { @content; } }
+@mixin xl { @media (min-width: $bp-xl) { @content; } }
+
+// Motion — wrap transitions/animations to respect user preference
+@mixin motion-safe {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+@mixin motion-reduce {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+// Container queries
+@mixin container-sm { @container (min-width: 320px) { @content; } }
+@mixin container-md { @container (min-width: 480px) { @content; } }
+@mixin container-lg { @container (min-width: 640px) { @content; } }
+
+// Glass card surface
+@mixin glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-shadow);
+}
+
+// Glass input field
+@mixin glass-input {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius-sm);
+  color: var(--text-primary);
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-brand-light);
+    box-shadow: 0 0 0 3px var(--color-brand-subtle);
+  }
+}
+
+// Glow orb decorative element
+@mixin glow-orb($color: #7c3aed, $size: 400px) {
+  position: absolute;
+  inline-size: $size;
+  block-size: $size;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba($color, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+// Focus ring for interactive elements
+@mixin focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+}

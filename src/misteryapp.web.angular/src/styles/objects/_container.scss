@@ -1,0 +1,21 @@
+.o-container {
+  max-inline-size: 1280px;
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+.o-container--narrow {
+  max-inline-size: 800px;
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+.o-container--xs {
+  max-inline-size: 480px;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.o-container-region {
+  container-type: inline-size;
+}

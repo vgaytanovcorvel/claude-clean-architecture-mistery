@@ -1,0 +1,25 @@
+// Abstracts — no visual CSS output (CSS custom properties + SCSS definitions)
+@use 'abstracts/tokens' as tokens;
+@use 'abstracts/mixins' as m;
+
+// Generic — low-specificity universal resets
+@use 'generic/box-sizing';
+@use 'generic/normalize';
+@use 'generic/reset';
+
+// Base — bare HTML element defaults
+@use 'base/typography';
+@use 'base/elements';
+
+// Objects — layout structural classes
+@use 'objects/container';
+@use 'objects/layout';
+@use 'objects/stack';
+
+// Components — cross-cutting shared component styles
+@use 'components/glass';
+
+// Utilities — single-purpose helpers
+@use 'utilities/spacing';
+@use 'utilities/visibility';
+@use 'utilities/text';

@@ -1,0 +1,27 @@
+.page__inner {
+  inline-size: 100%;
+  max-inline-size: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.page__header {
+  text-align: center;
+}
+
+.page__logo {
+  font-size: 3rem;
+  color: var(--color-brand-light);
+  margin-block-end: var(--space-4);
+}
+
+.page__title {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-block-end: var(--space-2);
+}
+
+.page__subtitle {
+  color: var(--text-secondary);
+}

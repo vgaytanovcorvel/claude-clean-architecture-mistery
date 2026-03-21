@@ -1,0 +1,57 @@
+<form class="form" [formGroup]="form" (ngSubmit)="handleSubmit()">
+  <app-glass-input
+    label="Email"
+    type="email"
+    placeholder="you@example.com"
+    formControlName="email"
+    [error]="getError('email')"
+  />
+
+  @if (isSignup) {
+    <app-glass-input
+      label="Name"
+      type="text"
+      placeholder="Your name"
+      formControlName="name"
+      [error]="getError('name')"
+    />
+  }
+
+  <app-glass-input
+    label="Password"
+    type="password"
+    placeholder="••••••••"
+    formControlName="password"
+    [error]="getError('password')"
+  />
+
+  @if (serverError()) {
+    <div class="server-error" role="alert">
+      {{ serverError() }}
+    </div>
+  }
+
+  <app-glass-button
+    type="submit"
+    variant="primary"
+    size="lg"
+    [fullWidth]="true"
+    [disabled]="isLoading()"
+  >
+    @if (isLoading()) {
+      <span>Loading…</span>
+    } @else {
+      <span>{{ isSignup ? 'Create Account' : 'Sign In' }}</span>
+    }
+  </app-glass-button>
+
+  <p class="form__switch">
+    @if (isSignup) {
+      Already have an account?
+      <a routerLink="/auth/login">Sign in</a>
+    } @else {
+      Don't have an account?
+      <a routerLink="/auth/signup">Create one</a>
+    }
+  </p>
+</form>

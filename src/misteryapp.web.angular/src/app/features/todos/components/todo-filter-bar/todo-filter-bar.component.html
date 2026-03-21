@@ -1,0 +1,44 @@
+<div class="bar">
+  <div class="bar__stats">
+    <span class="bar__stat">
+      <strong>{{ totalCount() }}</strong> total
+    </span>
+    <span class="bar__divider">·</span>
+    <span class="bar__stat">
+      <strong>{{ completedCount() }}</strong> done
+    </span>
+  </div>
+
+  <div class="bar__filters">
+    <div class="bar__group">
+      @for (opt of statusOptions; track opt.value) {
+        <button
+          class="bar__chip"
+          [class.bar__chip--active]="statusFilter() === opt.value"
+          (click)="statusChanged.emit(opt.value)"
+        >
+          {{ opt.label }}
+        </button>
+      }
+    </div>
+
+    <div class="bar__group">
+      <button
+        class="bar__chip"
+        [class.bar__chip--active]="priorityFilter() === 'all'"
+        (click)="priorityChanged.emit('all')"
+      >
+        Any priority
+      </button>
+      @for (p of priorities; track p) {
+        <button
+          class="bar__chip bar__chip--priority-{{ p }}"
+          [class.bar__chip--active]="priorityFilter() === p"
+          (click)="priorityChanged.emit(p)"
+        >
+          {{ priorityLabels[p] }}
+        </button>
+      }
+    </div>
+  </div>
+</div>

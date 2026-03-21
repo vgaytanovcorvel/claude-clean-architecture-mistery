@@ -1,0 +1,48 @@
+.page__inner {
+  padding-block-start: var(--space-8);
+}
+
+.page__hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.page__name {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-block-end: var(--space-1);
+}
+
+.page__email {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.page__loading {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.page__view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.page__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.page__section-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+}
+
+.page__section-value {
+  color: var(--text-primary);
+}

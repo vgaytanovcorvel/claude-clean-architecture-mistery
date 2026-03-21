@@ -1,0 +1,29 @@
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: var(--font-weight-bold);
+  color: #fff;
+  flex-shrink: 0;
+  user-select: none;
+
+  &--sm {
+    inline-size: 2rem;
+    block-size: 2rem;
+    font-size: var(--text-sm);
+  }
+
+  &--md {
+    inline-size: 3rem;
+    block-size: 3rem;
+    font-size: var(--text-xl);
+  }
+
+  &--lg {
+    inline-size: 5rem;
+    block-size: 5rem;
+    font-size: var(--text-3xl);
+    box-shadow: 0 0 30px rgba(124, 58, 237, 0.4);
+  }
+}

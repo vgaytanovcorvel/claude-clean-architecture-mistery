@@ -1,0 +1,45 @@
+@use '../../../../styles/abstracts/mixins' as m;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+}
+
+.input {
+  @include m.glass-input;
+  padding-block: var(--space-3);
+  padding-inline: var(--space-4);
+  font-size: var(--text-base);
+  inline-size: 100%;
+
+  @include m.motion-safe {
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.wrapper--error .input {
+  border-color: var(--color-error);
+
+  &:focus {
+    box-shadow: 0 0 0 3px var(--color-error-bg);
+  }
+}
+
+.error {
+  font-size: var(--text-sm);
+  color: var(--color-error);
+}

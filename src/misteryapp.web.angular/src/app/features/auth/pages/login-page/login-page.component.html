@@ -1,0 +1,18 @@
+<div class="o-auth-layout">
+  <div class="page__inner">
+    <div class="page__header">
+      <div class="page__logo">✦</div>
+      <h1 class="page__title">Welcome back</h1>
+      <p class="page__subtitle">Sign in to your account</p>
+    </div>
+
+    <app-glass-card>
+      <app-auth-form
+        mode="login"
+        [isLoading]="isLoading()"
+        [serverError]="error()"
+        (submitted)="handleSubmit($event)"
+      />
+    </app-glass-card>
+  </div>
+</div>

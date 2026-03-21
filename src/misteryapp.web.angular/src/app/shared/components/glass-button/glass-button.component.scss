@@ -1,0 +1,100 @@
+@use '../../../../styles/abstracts/mixins' as m;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--glass-radius-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+
+  @include m.motion-safe {
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out),
+      opacity var(--duration-fast) var(--ease-out);
+  }
+
+  @include m.focus-ring;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Sizes
+.btn--sm {
+  padding-block: var(--space-1);
+  padding-inline: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.btn--md {
+  padding-block: var(--space-2);
+  padding-inline: var(--space-5);
+  font-size: var(--text-base);
+}
+
+.btn--lg {
+  padding-block: var(--space-3);
+  padding-inline: var(--space-6);
+  font-size: var(--text-lg);
+}
+
+.btn--full {
+  inline-size: 100%;
+}
+
+// Variants
+.btn--primary {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background: var(--color-brand-light);
+    border-color: var(--color-brand-light);
+    box-shadow: var(--glass-shadow-glow);
+  }
+}
+
+.btn--secondary {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  color: var(--text-primary);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  &:hover:not(:disabled) {
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-hover);
+  }
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-secondary);
+
+  &:hover:not(:disabled) {
+    background: var(--glass-bg);
+    color: var(--text-primary);
+  }
+}
+
+.btn--danger {
+  background: var(--color-error-bg);
+  border-color: rgba(248, 113, 113, 0.3);
+  color: var(--color-error);
+
+  &:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: var(--color-error);
+  }
+}

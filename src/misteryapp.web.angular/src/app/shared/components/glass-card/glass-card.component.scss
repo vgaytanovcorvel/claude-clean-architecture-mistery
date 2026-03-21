@@ -1,0 +1,12 @@
+@use '../../../../styles/abstracts/mixins' as m;
+
+.card {
+  @include m.glass-card;
+  padding: var(--space-6);
+
+  @include m.motion-safe {
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+}

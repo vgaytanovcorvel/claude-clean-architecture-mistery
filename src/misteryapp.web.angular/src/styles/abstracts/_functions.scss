@@ -1,0 +1,11 @@
+// Convert px to rem (base 16px)
+@function rem($px) {
+  @return ($px / 16) * 1rem;
+}
+
+// Clamp a value between min and max with a fluid middle
+@function fluid($min-size, $max-size, $min-vw: 320px, $max-vw: 1280px) {
+  $slope: ($max-size - $min-size) / ($max-vw - $min-vw);
+  $intercept: $min-size - $slope * $min-vw;
+  @return clamp(#{$min-size}, #{$intercept} + #{$slope * 100}vw, #{$max-size});
+}

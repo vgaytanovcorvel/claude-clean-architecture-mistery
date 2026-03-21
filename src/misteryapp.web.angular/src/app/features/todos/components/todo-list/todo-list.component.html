@@ -1,0 +1,23 @@
+@if (isLoading()) {
+  <div class="list__loading" aria-live="polite">
+    <div class="list__spinner" aria-label="Loading todos"></div>
+  </div>
+} @else if (todos().length === 0) {
+  <div class="list__empty">
+    <div class="list__empty-icon">📋</div>
+    <p class="list__empty-text">No todos here. Create one to get started!</p>
+  </div>
+} @else {
+  <ul class="list" role="list">
+    @for (todo of todos(); track todo.id) {
+      <li>
+        <app-todo-card
+          [todo]="todo"
+          (toggleComplete)="toggleComplete.emit($event)"
+          (editRequest)="editRequest.emit($event)"
+          (deleteRequest)="deleteRequest.emit($event)"
+        />
+      </li>
+    }
+  </ul>
+}

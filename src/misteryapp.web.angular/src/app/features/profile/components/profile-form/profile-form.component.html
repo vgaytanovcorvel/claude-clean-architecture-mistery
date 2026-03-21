@@ -1,0 +1,35 @@
+<form class="form" [formGroup]="form" (ngSubmit)="handleSubmit()">
+  <app-glass-input
+    label="Display Name"
+    type="text"
+    placeholder="Your name"
+    formControlName="name"
+    [error]="getError('name')"
+  />
+
+  <div class="form__info">
+    <span class="form__info-label">Email</span>
+    <span class="form__info-value">{{ user().email }}</span>
+  </div>
+
+  @if (serverError()) {
+    <div class="form__error" role="alert">{{ serverError() }}</div>
+  }
+
+  <div class="form__actions">
+    <app-glass-button
+      type="button"
+      variant="ghost"
+      (clicked)="cancelled.emit()"
+    >
+      Cancel
+    </app-glass-button>
+    <app-glass-button
+      type="submit"
+      variant="primary"
+      [disabled]="isLoading()"
+    >
+      Save Changes
+    </app-glass-button>
+  </div>
+</form>

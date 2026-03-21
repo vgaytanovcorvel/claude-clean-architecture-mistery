@@ -1,0 +1,66 @@
+@use '../abstracts/mixins' as m;
+
+html,
+body {
+  block-size: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+
+  @include m.motion-reduce {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  min-block-size: 100dvh;
+  background: var(--page-bg-gradient);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+// Global focus-visible
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+input,
+textarea,
+select {
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit;
+}
+
+img {
+  block-size: auto;
+}
+
+// Scrollbar styling for dark theme
+::-webkit-scrollbar {
+  inline-size: 6px;
+  block-size: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}

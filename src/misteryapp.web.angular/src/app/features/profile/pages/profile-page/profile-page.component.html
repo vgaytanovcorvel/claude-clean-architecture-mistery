@@ -1,0 +1,47 @@
+<div class="o-page__body o-container--xs">
+  <div class="page__inner o-stack">
+    <div class="page__hero">
+      @if (state.profileResource.value(); as user) {
+        <app-avatar-badge
+          [name]="user.name"
+          [avatarColor]="user.avatarColor"
+          size="lg"
+        />
+        <div>
+          <h1 class="page__name">{{ user.name }}</h1>
+          <p class="page__email">{{ user.email }}</p>
+        </div>
+      } @else if (state.profileResource.isLoading()) {
+        <div class="page__loading">Loading profile…</div>
+      }
+    </div>
+
+    <app-glass-card>
+      @if (state.isEditing()) {
+        @if (state.profileResource.value(); as user) {
+          <app-profile-form
+            [user]="user"
+            [serverError]="saveError()"
+            (submitted)="handleSave($event)"
+            (cancelled)="state.cancelEditing()"
+          />
+        }
+      } @else {
+        <div class="page__view">
+          <div class="page__section">
+            <span class="page__section-label">Member since</span>
+            <span class="page__section-value">
+              {{ state.profileResource.value()?.createdAt | date: 'MMMM y' }}
+            </span>
+          </div>
+          <app-glass-button
+            variant="secondary"
+            (clicked)="state.startEditing()"
+          >
+            Edit Profile
+          </app-glass-button>
+        </div>
+      }
+    </app-glass-card>
+  </div>
+</div>

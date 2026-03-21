@@ -1,0 +1,51 @@
+<div class="o-page__body o-container--narrow">
+  <div class="page__header">
+    <div>
+      <h1 class="page__title">My Todos</h1>
+      <p class="page__subtitle">Stay organised and productive</p>
+    </div>
+    <app-glass-button
+      variant="primary"
+      (clicked)="state.openCreateForm()"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      New Todo
+    </app-glass-button>
+  </div>
+
+  <app-todo-filter-bar
+    [statusFilter]="state.statusFilter()"
+    [priorityFilter]="state.priorityFilter()"
+    [totalCount]="state.totalCount()"
+    [completedCount]="state.completedCount()"
+    (statusChanged)="state.setStatusFilter($event)"
+    (priorityChanged)="state.setPriorityFilter($event)"
+  />
+
+  <app-todo-list
+    [todos]="state.filteredTodos()"
+    [isLoading]="false"
+    (toggleComplete)="state.toggleComplete($event)"
+    (editRequest)="state.openEditForm($event)"
+    (deleteRequest)="state.deleteTodo($event.id)"
+  />
+</div>
+
+@if (state.isFormOpen()) {
+  <div class="modal-backdrop" (click)="state.closeForm()" role="presentation">
+    <div class="modal-panel" (click)="$event.stopPropagation()" role="dialog" aria-label="Todo form">
+      <app-glass-card>
+        <app-todo-form
+          [todo]="state.editingTodo()"
+          [isLoading]="isSaving()"
+          [serverError]="formError()"
+          (submitted)="handleFormSubmit($event)"
+          (cancelled)="state.closeForm()"
+        />
+      </app-glass-card>
+    </div>
+  </div>
+}
