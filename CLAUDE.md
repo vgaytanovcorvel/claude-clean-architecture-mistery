@@ -31,8 +31,11 @@ dotnet ef database update --project src/MisteryApp.Repository
 # Run the API
 dotnet run --project src/MisteryApp.Web.Api
 
-# Run the web server (with Angular SPA)
+# Run the web server (with React SPA)
 dotnet run --project src/MisteryApp.Web.Server
+
+# React SPA dev server (from src/misteryapp.web.client.react/)
+npm run dev
 
 # Run the CLI
 dotnet run --project src/MisteryApp.Cli -- --help
@@ -50,7 +53,8 @@ src/
 ├── MisteryApp.Repository/      ← EF Core repos, entities, migrations (depends on Abstractions)
 ├── MisteryApp.Web.Core/        ← Controllers, filters, middleware (depends on Implementation)
 ├── MisteryApp.Web.Api/         ← API host, Program.cs, Swagger (depends on Web.Core + Repository)
-├── MisteryApp.Web.Server/      ← SPA host (optional, depends on Web.Core + Repository)
+├── MisteryApp.Web.Server/      ← SPA host (depends on Web.Core + Repository + React .esproj)
+├── misteryapp.web.client.react/ ← React 19 SPA (.esproj, Vite + React Query + Zustand)
 └── MisteryApp.Cli/             ← CLI host, System.CommandLine 2.0.5 with manual DI (depends on all)
 
 tests/
@@ -103,7 +107,7 @@ Detailed rules live in `rules/`. Apply them automatically based on file type:
 | File pattern | Rules |
 |---|---|
 | `**/*.cs` | `rules/csharp/` + `rules/common/` |
-| `**/*.ts`, `**/*.html` | `rules/typescript/` + `rules/common/` |
+| `**/*.ts`, `**/*.tsx`, `**/*.html` | `rules/typescript/` + `rules/common/` |
 
 Key rule files:
 - `rules/csharp/modularization.md` — assembly structure and dependency flow
@@ -113,7 +117,8 @@ Key rule files:
 - `rules/csharp/presentation.md` — Web.Core controllers and minimal APIs
 - `rules/csharp/hosting.md` — Program.cs pipeline, middleware order, global exception handler
 - `rules/csharp/testing.md` — MSTest + Moq patterns (strict mocks, virtual methods, VerifyAll)
-- `rules/typescript/angular.md` — Angular 19+ signals, standalone components, control flow syntax
+- `rules/typescript/react.md` — React 19 clean architecture, React Query, Zustand, composition root
+- `rules/typescript/frontend-arch.md` — Framework-agnostic frontend layering (Domain <- Repository <- Service <- State <- Presentation)
 
 ## Available Skills
 
