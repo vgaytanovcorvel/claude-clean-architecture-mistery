@@ -40,4 +40,47 @@ describe('TodosPageComponent', () => {
   it('should create the component', () => {
     expect(component).toBeTruthy()
   })
+
+  describe('onCreateTodo', () => {
+    it('should delegate to todoState.createTodo with the request', async () => {
+      // Arrange
+      const request = { title: 'New todo', description: 'desc' }
+      const todoState = TestBed.inject(TodoStateService) as any
+
+      // Act
+      await (component as any).onCreateTodo(request)
+
+      // Assert
+      expect(todoState.createTodo).toHaveBeenCalledTimes(1)
+      expect(todoState.createTodo).toHaveBeenCalledWith(request)
+    })
+  })
+
+  describe('onToggle', () => {
+    it('should delegate to todoState.toggleTodo with the id', async () => {
+      // Arrange
+      const todoState = TestBed.inject(TodoStateService) as any
+
+      // Act
+      await (component as any).onToggle(42)
+
+      // Assert
+      expect(todoState.toggleTodo).toHaveBeenCalledTimes(1)
+      expect(todoState.toggleTodo).toHaveBeenCalledWith(42)
+    })
+  })
+
+  describe('onDelete', () => {
+    it('should delegate to todoState.deleteTodo with the id', async () => {
+      // Arrange
+      const todoState = TestBed.inject(TodoStateService) as any
+
+      // Act
+      await (component as any).onDelete(7)
+
+      // Assert
+      expect(todoState.deleteTodo).toHaveBeenCalledTimes(1)
+      expect(todoState.deleteTodo).toHaveBeenCalledWith(7)
+    })
+  })
 })
