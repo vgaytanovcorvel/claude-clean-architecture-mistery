@@ -57,5 +57,3 @@ wwwroot/
 ## Launch settings
 **/Properties/launchSettings.json
 
-## npm
-package-lock.json
