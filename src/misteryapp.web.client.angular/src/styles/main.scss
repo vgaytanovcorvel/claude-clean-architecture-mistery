@@ -1,0 +1,14 @@
+@layer generic, base, objects, components, utilities;
+
+@use 'abstracts/tokens';
+@use 'abstracts/mixins';
+
+@layer generic {
+  @use 'generic/box-sizing';
+  @use 'generic/reset';
+}
+
+@layer base {
+  @use 'base/typography';
+  @use 'base/elements';
+}

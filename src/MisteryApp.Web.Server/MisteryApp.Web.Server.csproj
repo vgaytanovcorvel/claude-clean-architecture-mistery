@@ -10,5 +10,7 @@
     <ProjectReference Include="..\MisteryApp.Web.Core\MisteryApp.Web.Core.csproj" />
     <ProjectReference Include="..\MisteryApp.Implementation\MisteryApp.Implementation.csproj" />
     <ProjectReference Include="..\MisteryApp.Repository\MisteryApp.Repository.csproj" />
+    <ProjectReference Include="..\misteryapp.web.client.angular\misteryapp.web.client.angular.esproj"
+                      ReferenceOutputAssembly="false" />
   </ItemGroup>
 </Project>

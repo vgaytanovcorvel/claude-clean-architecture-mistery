@@ -51,6 +51,7 @@ src/
 ├── MisteryApp.Web.Core/        ← Controllers, filters, middleware (depends on Implementation)
 ├── MisteryApp.Web.Api/         ← API host, Program.cs, Swagger (depends on Web.Core + Repository)
 ├── MisteryApp.Web.Server/      ← SPA host (optional, depends on Web.Core + Repository)
+├── misteryapp.web.client.angular/ ← Angular 19+ SPA (.esproj, builds to Web.Server/wwwroot)
 └── MisteryApp.Cli/             ← CLI host, System.CommandLine 2.0.5 with manual DI (depends on all)
 
 tests/

@@ -265,6 +265,29 @@ The Angular SPA is a **separate sibling `.esproj` project** — see `typescript/
 
 ---
 
+### 10. [ProjectNamespace].Database
+
+**Purpose**: SQL database project containing the schema definition deployed as a DACPAC
+
+**Contains**:
+- Table definitions
+- Stored procedures, views, and functions
+- Seed data scripts (DML)
+- Post-deployment scripts
+- Schema and role definitions
+
+**Dependencies**: No .NET project references. May reference other database projects via DACPAC references.
+
+**When to create**: When the solution owns and deploys its own SQL Server database schema. Not needed when using EF Core code-first migrations exclusively.
+
+**Best Practices**:
+- Follow `common/database.md` for all naming conventions
+- One schema per logical domain boundary; avoid `dbo` for application objects
+- Seed data lives in DML scripts referenced from the post-deployment script, not in migrations
+- The `.Repository` project depends on this schema at runtime but has no compile-time project reference to it
+
+---
+
 ## Test Projects
 
 ### Naming Convention
@@ -328,10 +351,13 @@ Solution: MyProject
 │   │   ├── proxy.conf.js
 │   │   └── src/
 │   │       └── app/
-│   │           ├── core/               ← Singleton services, guards, interceptors
-│   │           ├── features/           ← Feature-sliced lazy modules
-│   │           ├── shared/             ← Reusable components, pipes, directives
-│   │           └── layout/             ← Shell (header, sidebar, footer)
+│   │           ├── domain/             ← Types, interfaces, errors
+│   │           ├── repositories/      ← HTTP services (*-api.service.ts)
+│   │           ├── services/          ← Business logic services
+│   │           ├── state/             ← Signals, resource(), reactive state
+│   │           ├── components/        ← Presentational components + shared/ + layout/
+│   │           ├── pages/             ← Smart components (page-level)
+│   │           └── core/              ← Providers, guards, interceptors
 │   ├── MyProject.Common/
 │   ├── MyProject.Abstractions/
 │   ├── MyProject.Implementation/
@@ -340,7 +366,8 @@ Solution: MyProject
 │   ├── MyProject.Web.Core/
 │   ├── MyProject.Web.Server/           ← References myproject.client.esproj
 │   ├── MyProject.Web.Api/
-│   └── MyProject.Cli/
+│   ├── MyProject.Cli/
+│   └── MyProject.Database/             ← SQL database project (.sqlproj)
 │
 └── tests/
     ├── MyProject.Common.Tests/
@@ -373,6 +400,7 @@ Every solution MUST use Central Package Management via `Directory.Packages.props
 7. **Web.Server** ← Web.Core, Implementation, Repository, client `.esproj` (ReferenceOutputAssembly=false)
 8. **Web.Api** ← Web.Core, Implementation, Repository
 9. **Cli** ← Abstractions, Implementation, Repository, Common
+10. **Database** ← No .NET dependencies (DACPAC references only)
 
 The Angular `.esproj` has no .NET assembly dependencies — it communicates with the backend exclusively via HTTP at runtime.
 
@@ -385,6 +413,7 @@ The Angular `.esproj` has no .NET assembly dependencies — it communicates with
 - **Web.Server** and **Web.Api** should NOT reference each other
 - **Cli** should NOT reference Web.* assemblies
 - **Angular `.esproj`** should NOT reference any .NET assembly (it is a build-only reference)
+- **Database** should NOT reference any .NET assembly; .NET projects do NOT reference Database
 
 ---
 
