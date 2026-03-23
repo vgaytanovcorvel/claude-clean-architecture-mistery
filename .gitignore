@@ -52,8 +52,11 @@ node_modules/
 dist/
 .angular/
 .vite/
-wwwroot/
+npm-debug.log*
 
-## Launch settings
+## SPA build output (Angular builds into Web.Server/wwwroot)
+src/MisteryApp.Web.Server/wwwroot/
+
+## Launch settings (user-specific ports and debug profiles)
 **/Properties/launchSettings.json
 
