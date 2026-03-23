@@ -1,0 +1,17 @@
+@if (isLoading()) {
+  <div class="todo-list__loading">Loading...</div>
+} @else {
+  <div class="todo-list">
+    @for (todo of todos(); track todo.todoItemId) {
+      <app-todo-item
+        [todo]="todo"
+        (toggle)="toggle.emit($event)"
+        (delete)="delete.emit($event)"
+      />
+    } @empty {
+      <div class="todo-list__empty">
+        <p>No todos yet. Add one above!</p>
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,11 @@
+<form class="todo-input" (ngSubmit)="onSubmit()">
+  <input
+    class="todo-input__field"
+    type="text"
+    placeholder="What needs to be done?"
+    [ngModel]="title()"
+    (ngModelChange)="title.set($event)"
+    name="title"
+  />
+  <button class="todo-input__button" type="submit">Add</button>
+</form>

@@ -1,0 +1,21 @@
+@mixin glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+
+  @supports (backdrop-filter: blur(1px)) {
+    backdrop-filter: blur(var(--glass-blur));
+  }
+}
+
+@mixin glass-strong {
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+
+  @supports (backdrop-filter: blur(1px)) {
+    backdrop-filter: blur(var(--glass-blur-strong));
+  }
+}

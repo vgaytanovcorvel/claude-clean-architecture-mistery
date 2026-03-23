@@ -1,0 +1,14 @@
+<header class="header">
+  <div class="header__brand">
+    <h1 class="header__title">Todo App</h1>
+  </div>
+  @if (authState.isLoggedIn()) {
+    <div class="header__user">
+      <span class="header__username">{{ authState.currentUser()?.displayName }}</span>
+      <button class="header__logout" (click)="authState.logout()">Logout</button>
+    </div>
+  }
+</header>
+<main class="main">
+  <ng-content />
+</main>

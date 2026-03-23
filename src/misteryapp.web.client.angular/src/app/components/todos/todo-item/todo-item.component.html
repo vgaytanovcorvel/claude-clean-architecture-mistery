@@ -1,0 +1,14 @@
+<div class="todo" [class.todo--completed]="todo().isCompleted">
+  <button class="todo__checkbox" (click)="toggle.emit(todo().todoItemId)">
+    @if (todo().isCompleted) {
+      <span class="todo__check">&#10003;</span>
+    }
+  </button>
+  <div class="todo__content">
+    <span class="todo__title">{{ todo().title }}</span>
+    @if (todo().description) {
+      <span class="todo__description">{{ todo().description }}</span>
+    }
+  </div>
+  <button class="todo__delete" (click)="delete.emit(todo().todoItemId)">&times;</button>
+</div>

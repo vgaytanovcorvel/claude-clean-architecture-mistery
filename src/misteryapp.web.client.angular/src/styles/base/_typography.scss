@@ -1,8 +1,9 @@
 body {
   font-family: var(--font-sans);
   font-size: var(--text-base);
-  color: var(--color-text-primary);
-  background: var(--color-bg-page);
+  color: var(--color-text-on-glass);
+  background: var(--color-bg-gradient);
+  min-block-size: 100dvh;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }

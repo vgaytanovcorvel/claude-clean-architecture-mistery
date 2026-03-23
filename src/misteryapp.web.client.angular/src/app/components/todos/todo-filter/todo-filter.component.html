@@ -1,0 +1,23 @@
+<div class="filter">
+  <button
+    class="filter__button"
+    [class.filter__button--active]="filter() === 'all'"
+    (click)="filterChange.emit('all')"
+  >
+    All
+  </button>
+  <button
+    class="filter__button"
+    [class.filter__button--active]="filter() === 'active'"
+    (click)="filterChange.emit('active')"
+  >
+    Active
+  </button>
+  <button
+    class="filter__button"
+    [class.filter__button--active]="filter() === 'completed'"
+    (click)="filterChange.emit('completed')"
+  >
+    Completed
+  </button>
+</div>

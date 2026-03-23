@@ -9,6 +9,14 @@ builder.Services.AddMisteryAppServices();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddWebCore();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev", policy =>
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 var app = builder.Build();
 
 app.UseExceptionHandler(errorApp =>
@@ -43,6 +51,7 @@ app.UseExceptionHandler(errorApp =>
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors("AllowAngularDev");
 app.UseAuthentication();
 app.UseAuthorization();
 

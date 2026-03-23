@@ -1,0 +1,15 @@
+<div class="todos-page">
+  <app-todo-input (create)="onCreateTodo($event)" />
+
+  <app-todo-filter
+    [filter]="todoState.filter()"
+    (filterChange)="todoState.filter.set($event)"
+  />
+
+  <app-todo-list-view
+    [todos]="todoState.filteredTodos()"
+    [isLoading]="todoState.todos.isLoading()"
+    (toggle)="onToggle($event)"
+    (delete)="onDelete($event)"
+  />
+</div>

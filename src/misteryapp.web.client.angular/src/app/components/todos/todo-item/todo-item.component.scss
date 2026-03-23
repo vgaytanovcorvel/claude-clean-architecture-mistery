@@ -1,0 +1,108 @@
+@use '../../../../styles/abstracts/glass' as g;
+@use '../../../../styles/abstracts/mixins' as m;
+
+:host {
+  display: block;
+}
+
+.todo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-inline: var(--space-4);
+  padding-block: var(--space-3);
+  @include g.glass;
+
+  @include m.motion-safe {
+    transition: transform var(--duration-fast) var(--ease-out),
+                opacity var(--duration-fast) var(--ease-out);
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &--completed {
+    opacity: 0.6;
+
+    .todo__title {
+      text-decoration: line-through;
+    }
+  }
+}
+
+.todo__checkbox {
+  inline-size: 24px;
+  block-size: 24px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--glass-border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-on-glass);
+  font-size: var(--text-sm);
+
+  @include m.motion-safe {
+    transition: background var(--duration-fast) var(--ease-out),
+                border-color var(--duration-fast) var(--ease-out);
+  }
+
+  &:hover {
+    background: var(--glass-bg-strong);
+    border-color: var(--color-text-on-glass);
+  }
+}
+
+.todo__check {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.todo__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.todo__title {
+  font-size: var(--text-base);
+  color: var(--color-text-on-glass);
+}
+
+.todo__description {
+  font-size: var(--text-sm);
+  color: var(--color-text-on-glass-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.todo__delete {
+  background: transparent;
+  border: none;
+  color: var(--color-text-on-glass-secondary);
+  font-size: var(--text-xl);
+  cursor: pointer;
+  padding: var(--space-1);
+  line-height: 1;
+  flex-shrink: 0;
+  opacity: 0;
+
+  @include m.motion-safe {
+    transition: opacity var(--duration-fast) var(--ease-out),
+                color var(--duration-fast) var(--ease-out);
+  }
+
+  .todo:hover & {
+    opacity: 1;
+  }
+
+  &:hover {
+    color: #ff6b6b;
+  }
+}

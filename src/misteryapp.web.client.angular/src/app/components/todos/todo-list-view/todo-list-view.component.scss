@@ -1,0 +1,16 @@
+@use '../../../../styles/abstracts/glass' as g;
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.todo-list__loading,
+.todo-list__empty {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--color-text-on-glass-secondary);
+  font-size: var(--text-sm);
+  @include g.glass;
+}

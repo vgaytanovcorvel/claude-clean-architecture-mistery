@@ -66,3 +66,16 @@
   --spacing-page-x: var(--space-6);
   --spacing-card-pad: var(--space-4);
 }
+
+// Glass tokens
+:root {
+  --glass-bg: rgb(255 255 255 / 0.12);
+  --glass-bg-strong: rgb(255 255 255 / 0.2);
+  --glass-border: rgb(255 255 255 / 0.25);
+  --glass-shadow: 0 8px 32px rgb(0 0 0 / 0.1);
+  --glass-blur: 16px;
+  --glass-blur-strong: 24px;
+  --color-bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --color-text-on-glass: #ffffff;
+  --color-text-on-glass-secondary: rgb(255 255 255 / 0.7);
+}
