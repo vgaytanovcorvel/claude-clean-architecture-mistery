@@ -8,7 +8,10 @@
     <Project Path="src/MisteryApp.Web.Api/MisteryApp.Web.Api.csproj" />
     <Project Path="src/MisteryApp.Web.Core/MisteryApp.Web.Core.csproj" />
     <Project Path="src/MisteryApp.Web.Server/MisteryApp.Web.Server.csproj" />
-    <Project Path="src/misteryapp.web.client.angular/misteryapp.web.client.angular.esproj" />
+    <Project Path="src/misteryapp.web.client.angular/misteryapp.web.client.angular.esproj">
+      <Build />
+      <Deploy />
+    </Project>
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/MisteryApp.Abstractions.Tests/MisteryApp.Abstractions.Tests.csproj" />

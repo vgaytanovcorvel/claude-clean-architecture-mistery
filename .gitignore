@@ -12,6 +12,7 @@ obj/
 
 ## Rider / VS Code
 *.launch
+.vscode/
 
 ## Test results
 TestResults/
@@ -46,7 +47,15 @@ secrets.json
 .DS_Store
 Thumbs.db
 
-## Angular
-src/*.client/node_modules/
-src/*.client/dist/
-src/*.client/.angular/
+## Angular / React / SPA frontends
+node_modules/
+dist/
+.angular/
+.vite/
+wwwroot/
+
+## Launch settings
+**/Properties/launchSettings.json
+
+## npm
+package-lock.json
