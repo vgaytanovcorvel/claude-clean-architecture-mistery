@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import styles from './todo-page.module.css'
-import { AuroraBackground } from '../../components/shared/aurora-background/aurora-background'
 import { useUserList } from '../../state/users/use-user-list'
 import { useUserStore } from '../../state/users/user-store'
 import { useTodoList } from '../../state/todos/use-todo-list'
@@ -30,13 +29,8 @@ export function TodoPage() {
     updateTodo({ id, data: { title } })
   }
 
-  // Aurora intensity scales with pending todo count (0 = calm, 1 = vibrant)
-  const pendingCount = todos.filter(t => !t.isComplete).length
-  const auroraIntensity = Math.min(pendingCount / 8, 1)
-
   return (
     <main className="o-page">
-      <AuroraBackground intensity={auroraIntensity} />
       <motion.div
         className="o-container"
         initial={{ opacity: 0, y: 20 }}
