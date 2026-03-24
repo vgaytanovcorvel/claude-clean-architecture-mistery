@@ -21,7 +21,9 @@
   --white-15: rgba(255, 255, 255, 0.15);
   --white-20: rgba(255, 255, 255, 0.2);
   --white-40: rgba(255, 255, 255, 0.4);
+  --white-55: rgba(255, 255, 255, 0.55);
   --white-60: rgba(255, 255, 255, 0.6);
+  --white-70: rgba(255, 255, 255, 0.7);
   --white-80: rgba(255, 255, 255, 0.8);
   --white-90: rgba(255, 255, 255, 0.9);
 
@@ -48,8 +50,8 @@
   --color-border-glass: var(--white-10);
   --color-border-glass-hover: var(--white-20);
   --color-text-primary: var(--white-90);
-  --color-text-secondary: var(--white-60);
-  --color-text-muted: var(--white-40);
+  --color-text-secondary: var(--white-70);
+  --color-text-muted: var(--white-55);
   --color-text-complete: var(--white-40);
   --color-accent: var(--violet-500);
   --color-accent-hover: var(--violet-400);

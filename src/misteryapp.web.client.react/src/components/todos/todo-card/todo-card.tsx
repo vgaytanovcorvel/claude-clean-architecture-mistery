@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, type KeyboardEvent } from 'react'
+import { useState, useRef, useEffect, type KeyboardEvent, type MouseEvent } from 'react'
+import confetti from 'canvas-confetti'
 import styles from './todo-card.module.css'
 import type { TodoItem } from '../../../domain/models/todo-item'
 
@@ -7,6 +8,23 @@ interface TodoCardProps {
   onToggle: (id: number) => void
   onDelete: (id: number) => void
   onUpdate: (id: number, title: string) => void
+}
+
+function fireConfetti(e: MouseEvent) {
+  const rect = (e.target as HTMLElement).getBoundingClientRect()
+  const x = (rect.left + rect.width / 2) / window.innerWidth
+  const y = (rect.top + rect.height / 2) / window.innerHeight
+
+  confetti({
+    particleCount: 40,
+    spread: 60,
+    startVelocity: 20,
+    gravity: 0.8,
+    origin: { x, y },
+    colors: ['#8b5cf6', '#d946ef', '#e879f9', '#22d3ee', '#a78bfa'],
+    ticks: 60,
+    scalar: 0.8,
+  })
 }
 
 export function TodoCard({ todo, onToggle, onDelete, onUpdate }: TodoCardProps) {
@@ -37,11 +55,18 @@ export function TodoCard({ todo, onToggle, onDelete, onUpdate }: TodoCardProps) 
     if (e.key === 'Escape') setIsEditing(false)
   }
 
+  function handleToggle(e: MouseEvent) {
+    if (!todo.isComplete) {
+      fireConfetti(e)
+    }
+    onToggle(todo.id)
+  }
+
   return (
     <li className={`${styles.card} ${todo.isComplete ? styles.cardComplete : ''}`}>
       <button
         className={`${styles.checkbox} ${todo.isComplete ? styles.checkboxChecked : ''}`}
-        onClick={() => onToggle(todo.id)}
+        onClick={handleToggle}
         aria-label={todo.isComplete ? `Mark "${todo.title}" incomplete` : `Mark "${todo.title}" complete`}
       >
         {todo.isComplete && (
@@ -77,15 +102,28 @@ export function TodoCard({ todo, onToggle, onDelete, onUpdate }: TodoCardProps) 
         )}
       </div>
 
-      <button
-        className={styles.deleteBtn}
-        onClick={() => onDelete(todo.id)}
-        aria-label={`Delete "${todo.title}"`}
-      >
-        <svg className={styles.deleteIcon} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-        </svg>
-      </button>
+      <div className={styles.actions}>
+        {!todo.isComplete && !isEditing && (
+          <button
+            className={styles.actionBtn}
+            onClick={handleStartEdit}
+            aria-label={`Edit "${todo.title}"`}
+          >
+            <svg className={styles.actionIcon} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+            </svg>
+          </button>
+        )}
+        <button
+          className={styles.actionBtn}
+          onClick={() => onDelete(todo.id)}
+          aria-label={`Delete "${todo.title}"`}
+        >
+          <svg className={styles.actionIcon} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+          </svg>
+        </button>
+      </div>
     </li>
   )
 }

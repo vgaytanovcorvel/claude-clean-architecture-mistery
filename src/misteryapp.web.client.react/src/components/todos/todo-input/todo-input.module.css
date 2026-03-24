@@ -23,13 +23,23 @@
 }
 
 .input::placeholder {
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 .input:focus {
   outline: none;
   border-color: var(--color-accent);
   box-shadow: 0 0 12px var(--color-accent-glow);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
 }
 
 .input:disabled {
@@ -62,7 +72,9 @@
 }
 
 .button:hover:not(:disabled) {
-  opacity: 0.9;
+  transform: scale(1.08);
+  box-shadow: 0 0 28px var(--color-accent-glow);
+  filter: brightness(1.1);
 }
 
 .button:disabled {

@@ -38,6 +38,6 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   padding-inline-start: var(--space-2);
 }

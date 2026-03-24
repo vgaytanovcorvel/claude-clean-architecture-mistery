@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import styles from './todo-list-view.module.css'
 import { Spinner } from '../../shared/spinner/spinner'
 import { ErrorMessage } from '../../shared/error-message/error-message'
@@ -14,6 +15,12 @@ interface TodoListViewProps {
   onToggle: (id: number) => void
   onDelete: (id: number) => void
   onUpdate: (id: number, title: string) => void
+}
+
+const itemVariants = {
+  initial: { opacity: 0, y: 20, scale: 0.95 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  exit: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } },
 }
 
 export function TodoListView({
@@ -37,23 +44,39 @@ export function TodoListView({
       {error && <ErrorMessage message={error} />}
 
       {!isLoading && !error && todos.length === 0 && (
-        <div className={styles.empty}>
+        <motion.div
+          className={styles.empty}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <p className={styles.emptyText}>No todos yet</p>
           <p className={styles.emptyHint}>Add one above to get started</p>
-        </div>
+        </motion.div>
       )}
 
       {pending.length > 0 && (
         <ul className={styles.list}>
-          {pending.map(todo => (
-            <TodoCard
-              key={todo.id}
-              todo={todo}
-              onToggle={onToggle}
-              onDelete={onDelete}
-              onUpdate={onUpdate}
-            />
-          ))}
+          <AnimatePresence mode="popLayout">
+            {pending.map(todo => (
+              <motion.div
+                key={todo.id}
+                layout
+                variants={itemVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+              >
+                <TodoCard
+                  todo={todo}
+                  onToggle={onToggle}
+                  onDelete={onDelete}
+                  onUpdate={onUpdate}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </ul>
       )}
 
@@ -63,15 +86,26 @@ export function TodoListView({
             Completed ({completed.length})
           </h3>
           <ul className={styles.list}>
-            {completed.map(todo => (
-              <TodoCard
-                key={todo.id}
-                todo={todo}
-                onToggle={onToggle}
-                onDelete={onDelete}
-                onUpdate={onUpdate}
-              />
-            ))}
+            <AnimatePresence mode="popLayout">
+              {completed.map(todo => (
+                <motion.div
+                  key={todo.id}
+                  layout
+                  variants={itemVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                >
+                  <TodoCard
+                    todo={todo}
+                    onToggle={onToggle}
+                    onDelete={onDelete}
+                    onUpdate={onUpdate}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </ul>
         </div>
       )}
