@@ -1,0 +1,136 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-glass);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card {
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+}
+
+.card:hover {
+  background: var(--color-bg-glass-hover);
+  border-color: var(--color-border-glass-hover);
+}
+
+.cardComplete {
+  opacity: 0.6;
+}
+
+/* ── Checkbox ────────────────────────────────────────────────────── */
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: 1.375rem;
+  block-size: 1.375rem;
+  border: 2px solid var(--color-border-glass-hover);
+  border-radius: var(--radius-sm);
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .checkbox {
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+}
+
+.checkbox:hover {
+  border-color: var(--color-accent);
+}
+
+.checkboxChecked {
+  background: var(--gradient-accent);
+  border-color: transparent;
+}
+
+.checkIcon {
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  color: var(--white);
+}
+
+/* ── Body ────────────────────────────────────────────────────────── */
+.body {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.title {
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  cursor: default;
+  word-break: break-word;
+}
+
+.titleComplete {
+  text-decoration: line-through;
+  color: var(--color-text-complete);
+}
+
+.editInput {
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+  box-shadow: 0 0 8px var(--color-accent-glow);
+}
+
+.meta {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* ── Delete ──────────────────────────────────────────────────────── */
+.deleteBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  opacity: 0;
+}
+
+.card:hover .deleteBtn {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .deleteBtn {
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out),
+      background var(--duration-fast) var(--ease-out);
+  }
+}
+
+.deleteBtn:hover {
+  color: var(--color-danger);
+  background: rgba(244, 63, 94, 0.15);
+}
+
+.deleteIcon {
+  inline-size: 1rem;
+  block-size: 1rem;
+}

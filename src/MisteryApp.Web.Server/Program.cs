@@ -11,6 +11,8 @@ builder.Services.AddWebCore();
 
 var app = builder.Build();
 
+await MisteryApp.Repository.Seeding.DatabaseSeeder.SeedAsync(app.Services);
+
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>

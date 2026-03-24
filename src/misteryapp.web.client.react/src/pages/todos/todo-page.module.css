@@ -1,0 +1,39 @@
+.header {
+  text-align: center;
+  margin-block-end: var(--space-8);
+}
+
+.title {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-block-start: var(--space-1);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  background: var(--color-bg-glass-strong);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-2xl);
+  backdrop-filter: blur(var(--glass-blur-strong));
+  box-shadow: var(--shadow-glass);
+}
+
+.hint {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  padding-block: var(--space-8);
+}

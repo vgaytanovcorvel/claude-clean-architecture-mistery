@@ -13,7 +13,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'https://localhost:7001',
+        target: 'https://localhost:49595',
         changeOrigin: true,
         secure: false,
       },
@@ -22,5 +22,10 @@ export default defineConfig({
   build: {
     outDir: '../MisteryApp.Web.Server/wwwroot',
     emptyOutDir: true,
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./src/test-setup.ts'],
   },
 })

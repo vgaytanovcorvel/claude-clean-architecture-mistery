@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MisteryApp.Abstractions.Interfaces;
 using MisteryApp.Repository.Contexts;
+using MisteryApp.Repository.Repositories;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -11,13 +13,10 @@ public static class PersistenceServiceCollectionExtensions
         IConfiguration configuration)
     {
         services.AddDbContextFactory<ApplicationDbContext>(options =>
-            options.UseSqlServer(
-                configuration.GetConnectionString("DefaultConnection"),
-                sqlOptions =>
-                {
-                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(5), errorNumbersToAdd: null);
-                    sqlOptions.CommandTimeout(30);
-                }));
+            options.UseInMemoryDatabase("MisteryAppDb"));
+
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ITodoRepository, TodoRepository>();
 
         return services;
     }

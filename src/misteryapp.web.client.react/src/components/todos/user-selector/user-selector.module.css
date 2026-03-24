@@ -1,0 +1,52 @@
+.bar {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-bg-glass);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .chip {
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+}
+
+.chip:hover {
+  background: var(--color-bg-glass-hover);
+  border-color: var(--color-border-glass-hover);
+  color: var(--color-text-primary);
+}
+
+.chipActive {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: var(--color-accent);
+  color: var(--color-text-primary);
+  box-shadow: 0 0 12px var(--color-accent-glow);
+}
+
+.avatar {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.name {
+  font-weight: 500;
+}

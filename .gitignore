@@ -46,7 +46,11 @@ secrets.json
 .DS_Store
 Thumbs.db
 
-## Angular
-src/*.client/node_modules/
-src/*.client/dist/
-src/*.client/.angular/
+## React SPA
+src/misteryapp.web.client.react/node_modules/
+src/misteryapp.web.client.react/dist/
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+## Playwright MCP
+.playwright-mcp/

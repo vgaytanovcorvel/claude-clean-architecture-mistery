@@ -4,7 +4,7 @@ A pre-scaffolded C# clean architecture solution you can clone and immediately st
 
 ## What's included
 
-- **8 source projects** wired with correct dependency flow
+- **9 source projects** wired with correct dependency flow (including React 19 SPA)
 - **8 test projects** (MSTest + Moq + FluentAssertions)
 - **Central package management** via `Directory.Packages.props`
 - **Per-module `CLAUDE.md` files** — Claude Code reads these automatically to understand each layer's rules
@@ -20,7 +20,8 @@ src/
 ├── MisteryApp.Repository/      ← EF Core repos, DbContext, migrations
 ├── MisteryApp.Web.Core/        ← Controllers, filters, middleware
 ├── MisteryApp.Web.Api/         ← API host (Swagger, global exception handler)
-├── MisteryApp.Web.Server/      ← SPA host (serves Angular + API together)
+├── MisteryApp.Web.Server/      ← SPA host (serves React + API together)
+├── misteryapp.web.client.react/ ← React 19 SPA (Vite + React Query + Zustand)
 └── MisteryApp.Cli/             ← CLI host (System.CommandLine 2.0.5)
 
 tests/
@@ -40,6 +41,18 @@ dotnet build MisteryApp.slnx
 
 # Open in your editor and start Claude Code
 code .
+```
+
+To run the React SPA in dev mode:
+
+```bash
+# Terminal 1 — start the API
+dotnet run --project src/MisteryApp.Web.Api
+
+# Terminal 2 — start the Vite dev server
+cd src/misteryapp.web.client.react
+npm install
+npm run dev
 ```
 
 Then describe what you want to build and Claude Code will follow the clean architecture rules automatically.

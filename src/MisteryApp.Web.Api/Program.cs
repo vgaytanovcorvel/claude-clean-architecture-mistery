@@ -18,6 +18,8 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+await MisteryApp.Repository.Seeding.DatabaseSeeder.SeedAsync(app.Services);
+
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>
